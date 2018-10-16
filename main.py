@@ -2,7 +2,7 @@ import board
 import player
 import sys
 import keyboard
-from Tkinter import *
+from tkinter import *
 import time
 import random
 
@@ -19,43 +19,65 @@ arr[5][5] = 1
 arr[4][14] = 1
 
 def moveUp(event):
-    if (player.y-1 < 0): return
-    if (arr[player.y-1][player.x] == 1): return
-    else:
+    #initial x and y positions
+    x = player.x*size+size/2
+    y = player.y*size+size/2
+    while ((player.y-1 >= 0) and (arr[player.y-1][player.x] != 1)):
         player.y -= 1
         canvas.move(p, 0, -size)
-        time.sleep(delay)
-        moveUp(event)
+    #x and y positions after movement
+    x1 = player.x*size+size/2
+    x2 = player.y*size+size/2
+    line = canvas.create_line(x, y, x1, x2, width = 3, fill='red')
+    root.update()
+    time.sleep(.2)
+    canvas.delete(line)
+
 
 def moveDown(event):
-    if (player.y+2 > h): return
-    if (arr[player.y+1][player.x] == 1): return
-    else:
+    #initial x and y positions
+    x = player.x*size+size/2
+    y = player.y*size+size/2
+    while ((player.y+1 < h) and (arr[player.y+1][player.x] != 1)):
         player.y += 1
-        canvas.move(p, 0, size)
-        root.update()
-        time.sleep(delay)
-        moveDown(event)
+        canvas.move(p, 0, +size)
+    #x and y positions after movement
+    x1 = player.x*size+size/2
+    x2 = player.y*size+size/2
+    line = canvas.create_line(x, y, x1, x2, width = 3, fill='red')
+    root.update()
+    time.sleep(.2)
+    canvas.delete(line)
 
 def moveLeft(event):
-    if (player.x-1 < 0): return
-    if (arr[player.y][player.x-1] == 1): return
-    else:
+    #initial x and y positions
+    x = player.x*size+size/2
+    y = player.y*size+size/2
+    while ((player.x-1 >= 0) and (arr[player.y][player.x-1] != 1)):
         player.x -= 1
         canvas.move(p, -size, 0)
-        root.update()
-        time.sleep(delay)
-        moveLeft(event)
+    #x and y positions after movement
+    x1 = player.x*size+size/2
+    x2 = player.y*size+size/2
+    line = canvas.create_line(x, y, x1, x2, width = 3, fill='red')
+    root.update()
+    time.sleep(.2)
+    canvas.delete(line)
 
 def moveRight(event):
-    if (player.x+2 > w): return
-    if (arr[player.y][player.x+1] == 1): return
-    else:
+    #initial x and y positions
+    x = player.x*size+size/2
+    y = player.y*size+size/2
+    while ((player.x+1 < w) and (arr[player.y][player.x+1] != 1)):
         player.x += 1
-        canvas.move(p, size, 0)
-        root.update()
-        time.sleep(delay)
-        moveRight(event)
+        canvas.move(p, +size, 0)
+    #x and y positions after movement
+    x1 = player.x*size+size/2
+    x2 = player.y*size+size/2
+    line = canvas.create_line(x, y, x1, x2, width = 3, fill='red')
+    root.update()
+    time.sleep(.2)
+    canvas.delete(line)
 
 def updateBoard():
     canvas.delete("all")
@@ -68,8 +90,6 @@ def updateBoard():
                 canvas.itemconfig(rect, fill='black')
             else: 
                 canvas.itemconfig(rect, fill='white')
-            # if (i==player.y and j==player.x): 
-                # p = canvas.create_oval(xpos+(size-player.size)/2, ypos+(size-player.size)/2, xpos+size-(size-player.size)/2, ypos+size-(size-player.size)/2, fill='blue')
 
 #-------Tkinter stuff--------
 root = Tk()                     #This creates a window, but it won't show up
