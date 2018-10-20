@@ -1,18 +1,20 @@
-from graphics import drawLine
+import objects
 
 class Player:
-    def __init__(self, newX, newY, newBoard):
-        self.x = newX
-        self.y = newY
+    def __init__(self, newX, newY):
+        self.x = newX   # x position of player
+        self.y = newY   # y position of player
         self.size = 35
-        self.board = newBoard
 
     def move(self, event, newDirection):
 
-        # set the direction vector for the player movement
+        boardSize = objects.board.size  # grab the board size of the current board
+
+        # set the direction vector for the player movement based on the newDirection variable
         xDirection = 0
         yDirection = 0
 
+        # note that the x, y origin is at the top-left, which is why UP is -1 in the y direction.
         if newDirection == "Down":
             yDirection = 1
         elif newDirection == "Up":
@@ -23,20 +25,23 @@ class Player:
             xDirection = -1
 
         #initial x and y positions
-        x0 = self.x * self.size + self.size / 2
-        y0 = self.y * self.size + self.size / 2
+        x0 = self.x * boardSize + boardSize / 2
+        y0 = self.y * boardSize + boardSize / 2
 
+        # handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving. 
+        # Otherwise, keep moving and update graphics.
         if yDirection != 0:
-            while ((self.y - 1 >= 0) and (self.board[self.y + yDirection][self.x] != 1)):
+            while ((self.y + yDirection >= 0 and self.y + yDirection < objects.board.height) and not (objects.board.tiles[self.y + yDirection][self.x].isWall())):
                 self.y += yDirection
-                self.canvas.move(p, 0, -self.size)
+                objects.graphics.moveCanvas(0, boardSize * yDirection)
         elif xDirection != 0:
-            while ((self.x-1 >= 0) and (self.board[self.y][self.x + xDirection] != 1)):
+            while ((self.x + xDirection >= 0 and self.x + xDirection < objects.board.width) and not (objects.board.tiles[self.y][self.x + xDirection].isWall())):
                 self.x += xDirection
-                self.canvas.move(p, -self.size, 0)
+                objects.graphics.moveCanvas(boardSize * xDirection, 0)
 
         #x and y positions after movement
-        x1 = self.x * self.size + self.size / 2
-        x2 = self.y * self.size + self.size / 2
+        x1 = self.x * boardSize + boardSize / 2
+        x2 = self.y * boardSize + boardSize / 2
 
-        drawLine(x0, y0, x1, y1)
+        # render the line behind player
+        objects.graphics.drawLine(x0, y0, x1, x2)
