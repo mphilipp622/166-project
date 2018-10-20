@@ -33,7 +33,7 @@ class Graphics:
 
     def moveCanvas(self, xAmount, yAmount):
         # Called from player.move()
-        self.canvas.move(self.p, xAmount, yAmount)
+        self.canvas.move(self.playerGraphic, xAmount, yAmount)
 
     def updateBoard(self):
         # redraw the board
@@ -54,11 +54,11 @@ class Graphics:
         boardSize = objects.board.size
         playerSize = objects.player.size
 
-        self.p = self.canvas.create_oval(0 + (boardSize - playerSize) / 2,
-                                        0 + (boardSize - playerSize) / 2, 
-                                        0 + boardSize - (boardSize - playerSize) / 2, 
-                                        0 + boardSize - (boardSize - playerSize) / 2, 
-                                        fill='red')
+        self.playerGraphic = self.canvas.create_oval(0 + (boardSize - playerSize) / 2,
+													0 + (boardSize - playerSize) / 2, 
+													0 + boardSize - (boardSize - playerSize) / 2, 
+													0 + boardSize - (boardSize - playerSize) / 2, 
+													fill='red')
 
     def updateCanvas(self):
         # main loop that's called from main
