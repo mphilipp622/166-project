@@ -1,29 +1,25 @@
 import enum
-import portalExit
-
-# this enum is used for tracking the type of this tile. Instead of using 4 booleans, we can check against this enum.
-# this is useful for consolidating the constructor
-class TileType(enum.Enum):
-    empty = 0
-    wall = 1
-    lava = 2
-    portal = 3
+import portal
 
 class Tile:
     
-    def __init__(self, tileType, portalExit = None):    
+    def __init__(self, tileType):    
         # portalExit defaults to nothing unless specified during instantiation.
         self.type = tileType
-        self.portalExit = portalExit
 
+    # tileType should be one of the following:
+    # "wall"
+    # "lava"
+    # "empty"
+    # "exit"
+    # "portalEntrance"
+    # "portalExit"
+    
     def isWall(self):
-        return self.type == TileType.wall
+        return self.type == "wall"
 
     def isLava(self):
-        return self.type == TileType.lava
-
-    def isPortal(self):
-        return self.type == TileType.portal
+        return self.type == "lava"
 
     def isEmpty(self):
-        return self.type == TileType.empty
+        return self.type == "empty"
