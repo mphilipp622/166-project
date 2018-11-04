@@ -60,8 +60,13 @@ class Graphics:
 													0 + boardSize - (boardSize - playerSize) / 2, 
 													fill='red')
 
-    def updateCanvas(self):
-        # main loop that's called from main
+    def initializeGraphics(self):
+        # this function initializes the graphics and starts tkinter's main loop.
+        # it begins concurrent execution of main() inside main.py
+        # This is called from start() in main.py
+        import main
+
         self.updateBoard()
         self.drawPlayer()
+        self.root.after(10, main.main) # after() allows us to say "after 10 ms, run main()". This allows us to make a game loop inside main.py
         self.root.mainloop()

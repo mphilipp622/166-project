@@ -7,6 +7,7 @@ class Player:
         self.size = 35
 
     def move(self, event, newDirection):
+        # pass argument None for event if you aren't using keyboard to move player. E.G: move(None, "Up")
 
         boardSize = objects.board.size  # grab the board size of the current board
 
@@ -31,11 +32,14 @@ class Player:
         # handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving. 
         # Otherwise, keep moving and update graphics.
         if yDirection != 0:
-            while ((self.y + yDirection >= 0 and self.y + yDirection < objects.board.height) and not (objects.board.tiles[self.y + yDirection][self.x].isWall())):
+            while ((self.y + yDirection >= 0 and self.y + yDirection < objects.board.height) and 
+            not (objects.board.tiles[self.y + yDirection][self.x].isWall())):
                 self.y += yDirection
                 objects.graphics.moveCanvas(0, boardSize * yDirection)
+                
         elif xDirection != 0:
-            while ((self.x + xDirection >= 0 and self.x + xDirection < objects.board.width) and not (objects.board.tiles[self.y][self.x + xDirection].isWall())):
+            while ((self.x + xDirection >= 0 and self.x + xDirection < objects.board.width) and 
+            not (objects.board.tiles[self.y][self.x + xDirection].isWall())):
                 self.x += xDirection
                 objects.graphics.moveCanvas(boardSize * xDirection, 0)
 
