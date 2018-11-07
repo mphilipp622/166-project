@@ -5,6 +5,7 @@ import random
 # player, board, and graphics are instantiated in objects.py file.
 
 def start():
+    # initialize tkinter graphics
     objects.graphics.initializeGraphics()
 
 def main():

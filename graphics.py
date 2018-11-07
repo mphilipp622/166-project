@@ -24,6 +24,9 @@ class Graphics:
 
         self.canvas.pack()
 
+        self.enemies = dict()
+        self.wormholes = dict()
+
     def drawLine(self, x0, y0, x1, x2):
         # renders line behind player after movement
         line = self.canvas.create_line(x0, y0, x1, x2, width = 3, fill='red')
@@ -47,8 +50,14 @@ class Graphics:
 
                 if objects.board.tiles[i][j].isWall():
                     self.canvas.itemconfig(rect, fill='black')
-                else: 
+                elif objects.board.tiles[i][j].isEmpty(): 
                     self.canvas.itemconfig(rect, fill='white')
+                elif objects.board.tiles[i][j].isLava():
+                    self.canvas.itemconfig(rect, fill='red')
+                elif objects.board.tiles[i][j].isWormhole():
+                    self.canvas.itemconfig(rect, fill='purple')
+                elif objects.board.tiles[i][j].isWormholeExit():
+                    self.canvas.itemconfig(rect, fill='green')
 
     def drawPlayer(self):
         boardSize = objects.board.size

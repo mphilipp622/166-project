@@ -1,5 +1,5 @@
 import enum
-import portal
+# import portal
 
 class Tile:
     
@@ -23,3 +23,12 @@ class Tile:
 
     def isEmpty(self):
         return self.type == "empty"
+
+    def isExit(self):
+        return self.type == "exit"
+
+    def isWormhole(self):
+        return self.type == "wormhole"
+
+    def isWormholeExit(self):
+        return self.type == "wormholeExit"

@@ -1,0 +1,51 @@
+{
+	"height" : 4,
+	
+	"width" : 4,
+	
+	"tileSize" : 60,
+	
+	"player" : [0, 0],
+	
+	"exit" : 
+	{
+		"position" : [2, 2], 
+		"keys" : 3
+	},
+
+	"walls" :
+	[
+		{
+			"position" : [1, 0]
+		},
+		{
+			"position" : [3, 2]
+		}
+	],
+
+	"deathTiles": 
+	[
+		{
+			"position": [3,0]
+		}
+	],
+
+	"wormholes": 
+	[
+		{
+			"positionEntrance": [3, 1],
+			"positionExit": [0, 1],
+			"directionEntrance": "up",
+			"directionExit" : "left"
+		}
+	],
+	
+	"enemies": 
+	[
+		{
+			"startingPosition": [1,1],
+			"positionBoundsX" : [1,3],
+			"positionBoundsY" : [3,3]
+		}
+	]
+}
