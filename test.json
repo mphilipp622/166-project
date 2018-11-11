@@ -40,7 +40,7 @@
 		}
 	],
 	
-	"enemies": 
+	"keys": 
 	[
 		{
 			"startingPosition": [1,1],

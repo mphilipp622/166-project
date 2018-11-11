@@ -1,6 +1,7 @@
 import keyboard
 import time
 import objects
+import key
 
 try:
     from tkinter import *   # handles python 3 compiler
@@ -24,8 +25,8 @@ class Graphics:
 
         self.canvas.pack()
 
-        self.enemies = dict()
-        self.wormholes = dict()
+        # self.keys = dict()
+        # self.wormholes = dict()
 
     def drawLine(self, x0, y0, x1, x2):
         # renders line behind player after movement

@@ -6,6 +6,7 @@ class Tile:
     def __init__(self, tileType):    
         # portalExit defaults to nothing unless specified during instantiation.
         self.type = tileType
+        self.key = False
 
     # tileType should be one of the following:
     # "wall"
@@ -32,3 +33,6 @@ class Tile:
 
     def isWormholeExit(self):
         return self.type == "wormholeExit"
+
+    def hasKey(self):
+        return self.key == True

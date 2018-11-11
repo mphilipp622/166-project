@@ -2,6 +2,7 @@ import tile
 import portal
 import portalExit
 import json
+import key
 
 class Board:
     
@@ -21,6 +22,7 @@ class Board:
         self.size = self.levelData["tileSize"]
         self.playerPosition = (self.levelData["player"][1], self.levelData["player"][0]) # player starting position as (x, y) tuple
         self.exitKeysRequired = self.levelData["exit"]["keys"]
+        self.keys = list()
         self.makeBoard()
 
     def makeBoard(self):
@@ -57,8 +59,14 @@ class Board:
             self.tiles[exitX][exitY] = portalExit.PortalExit(exitDirection)
             self.tiles[entranceX][entranceY] = portal.Portal(entranceDirection, self.tiles[exitX][exitY])
 
-        # need to figure out how enemies are stored
+        # need to figure out how keys are stored
 
-        # for enemy in self.levelData["enemies"]:
-        #     x = enemy["position"][1]
-        #     y = enemy["position"][0]
+        for keyObj in self.levelData["keys"]:
+            x = keyObj["startingPosition"][1]
+            y = keyObj["startingPosition"][0]
+            xmin = keyObj["positionBoundsX"][0]
+            xmax = keyObj["positionBoundsX"][1]
+            ymin = keyObj["positionBoundsY"][0]
+            ymax = keyObj["positionBoundsY"][1]
+            self.tiles[x][y].key = True
+            self.keys.append(key.Key(x, y, xmin, xmax, ymin, ymax))
