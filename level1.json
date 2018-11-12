@@ -5,7 +5,7 @@
 	
 	"tileSize" : 60,
 	
-	"player" : [3, 3],
+	"player" : [3,2],
 	
 	"exit" : 
 	{
@@ -67,7 +67,7 @@
 	"keys": 
 	[
 		{
-			"startingPosition": [6,1],
+			"startingPosition": [4,2],
 			"positionBoundsX" : [4,7],
 			"positionBoundsY" : [0,2]
 		}

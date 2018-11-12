@@ -8,6 +8,7 @@ class Portal(tile.Tile):
         self.direction = entranceDirection
         self.exit = newExit
         self.type = "wormhole"
+        self.key = False
 
     def getPortalExit(self):
         return self.exit

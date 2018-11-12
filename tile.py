@@ -34,4 +34,4 @@ class Tile:
         return self.type == "wormholeExit"
 
     def hasKey(self):
-        return self.key == True
+        return self.key

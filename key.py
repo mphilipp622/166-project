@@ -20,19 +20,20 @@ class Key:
 		if direction=="Down":
 			self.y += 1
 		
+		self.direction = direction
+		
 	def move(self, board):
-		print(str(self.x) + " by " + str(self.y) + "\n")
 		board.tiles[self.x][self.y].key = False
 		myMoves = ["Left", "Right", "Up", "Down"]
 		if self.direction == None:
 			self.direction = random.choice(myMoves)
-		if ((self.x == self.xmin) or (self.x-1 > 0 and board.tiles[self.x-1][self.y].isWall() and self.direction == "Left")):
+		if ((self.x == self.xmin) or self.x == 0 or (self.x-1 > 0 and board.tiles[self.x-1][self.y].isWall())):
 			myMoves.remove("Left")
-		if ((self.x == self.xmax) or (self.x+1 < board.width-1 and board.tiles[self.x+1][self.y].isWall() and self.direction == "Right")):
+		if ((self.x == self.xmax) or (self.x == board.width - 1) or (board.tiles[self.x+1][self.y].isWall())):
 			myMoves.remove("Right")
-		if ((self.y == self.ymin) or (self.y-1 > 0 and board.tiles[self.x][self.y-1].isWall() and self.direction == "Up")):
+		if ((self.y == self.ymin) or self.y == 0 or (board.tiles[self.x][self.y-1].isWall())):
 			myMoves.remove("Up")
-		if ((self.y == self.ymax) or (self.y+1 < board.height-1 and board.tiles[self.x][self.y+1].isWall() and self.direction == "Down")):
+		if ((self.y == self.ymax) or (self.y == board.height - 1) or (board.tiles[self.x][self.y+1].isWall())):
 			myMoves.remove("Down")
 			
 		if (not(self.direction in myMoves) or (random.randint(0, 5) % 3 == 0)):
@@ -42,4 +43,6 @@ class Key:
 			self.go(choice)
 		else:
 			self.go(self.direction)
+
+		print(self.direction + "    " + str(self.y) + ", " + str(self.x))
 		board.tiles[self.x][self.y].key = True

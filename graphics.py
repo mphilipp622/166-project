@@ -64,10 +64,10 @@ class Graphics:
         boardSize = objects.board.size
         playerSize = objects.player.size
 
-        self.playerGraphic = self.canvas.create_oval(objects.board.playerPosition[0] *boardSize + (boardSize - playerSize) / 2,
-													objects.board.playerPosition[1]*boardSize + (boardSize - playerSize) / 2, 
-													objects.board.playerPosition[0]*boardSize + boardSize - (boardSize - playerSize) / 2, 
-													objects.board.playerPosition[1]*boardSize + boardSize - (boardSize - playerSize) / 2, 
+        self.playerGraphic = self.canvas.create_oval(objects.player.x *boardSize + (boardSize - playerSize) / 2,
+													objects.player.y*boardSize + (boardSize - playerSize) / 2, 
+													objects.player.x*boardSize + boardSize - (boardSize - playerSize) / 2, 
+													objects.player.y*boardSize + boardSize - (boardSize - playerSize) / 2, 
 													fill='red')
 
     def initializeGraphics(self):

@@ -19,8 +19,8 @@ def main():
     # objects.player.move(None, random.choice(["Up", "Down", "Left", "Right"])) # Testing random player movement
 
     moveKeys()
-    
-    objects.graphics.root.after(10, main) # pause for 10 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
+    # objects.graphics.drawKeys()
+    objects.graphics.root.after(1000, main) # pause for 10 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
 
 if __name__ == '__main__':
     start()
