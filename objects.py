@@ -13,6 +13,6 @@ else:
     exit()
 
 #playerConstructor(startingXPos, startingYPos)
-player = player.Player(board.playerPosition[1], board.playerPosition[0])
+player = player.Player(board.playerPosition[0], board.playerPosition[1])
 
 graphics = graphics.Graphics()

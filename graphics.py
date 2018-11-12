@@ -43,10 +43,10 @@ class Graphics:
         # redraw the board
         self.canvas.delete("all")
 
-        for i in range(objects.board.height):
-            for j in range(objects.board.width):
-                xpos = j * objects.board.size
-                ypos = i * objects.board.size
+        for i in range(objects.board.width):
+            for j in range(objects.board.height):
+                xpos = i * objects.board.size
+                ypos = j * objects.board.size
                 rect = self.canvas.create_rectangle(xpos, ypos, xpos + objects.board.size, ypos + objects.board.size, fill='#FFF')
 
                 if objects.board.tiles[i][j].isWall():
@@ -63,12 +63,16 @@ class Graphics:
     def drawPlayer(self):
         boardSize = objects.board.size
         playerSize = objects.player.size
+        print(str(objects.player.x) + ", " + str(objects.player.y))
 
         self.playerGraphic = self.canvas.create_oval(objects.player.x *boardSize + (boardSize - playerSize) / 2,
 													objects.player.y*boardSize + (boardSize - playerSize) / 2, 
 													objects.player.x*boardSize + boardSize - (boardSize - playerSize) / 2, 
 													objects.player.y*boardSize + boardSize - (boardSize - playerSize) / 2, 
 													fill='red')
+    
+    
+
 
     def initializeGraphics(self):
         # this function initializes the graphics and starts tkinter's main loop.

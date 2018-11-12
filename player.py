@@ -33,13 +33,13 @@ class Player:
         # Otherwise, keep moving and update graphics.
         if yDirection != 0:
             while ((self.y + yDirection >= 0 and self.y + yDirection < objects.board.height) and 
-            not (objects.board.tiles[self.y + yDirection][self.x].isWall())):
+            not (objects.board.tiles[self.x][self.y + yDirection].isWall())):
                 self.y += yDirection
                 objects.graphics.moveCanvas(0, boardSize * yDirection)
                 
         elif xDirection != 0:
             while ((self.x + xDirection >= 0 and self.x + xDirection < objects.board.width) and 
-            not (objects.board.tiles[self.y][self.x + xDirection].isWall())):
+            not (objects.board.tiles[self.x + xDirection][self.y].isWall())):
                 self.x += xDirection
                 objects.graphics.moveCanvas(boardSize * xDirection, 0)
 
