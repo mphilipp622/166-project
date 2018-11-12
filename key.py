@@ -47,5 +47,5 @@ class Key:
 		else:
 			self.go(self.direction)
 
-		print(self.direction + "    " + str(self.x) + ", " + str(self.y))
+		# print(self.direction + "    " + str(self.x) + ", " + str(self.y))
 		board.tiles[self.x][self.y].key = True
