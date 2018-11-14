@@ -1,6 +1,7 @@
 import objects
 import sys
 import random
+import state
 
 # player, board, and graphics are instantiated in objects.py file.
 
@@ -13,7 +14,6 @@ def moveKeys():
         key.move(objects.board)
 
 def main():
-
     # Main Game Loop. Enemy movement, wormhole movement, player movement all go here
 
     # objects.player.move(None, random.choice(["Up", "Down", "Left", "Right"])) # Testing random player movement

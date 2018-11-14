@@ -40,8 +40,9 @@ class Key:
 			myMoves.remove("Down")
 			
 		if (not(self.direction in myMoves) or (random.randint(0, 5) % 3 == 0)):
-			if self.direction in myMoves:
+			if self.direction in myMoves and len(myMoves) > 1: # check the length to ensure we will have a move to make after removing
 				myMoves.remove(self.direction)
+
 			choice = random.choice(myMoves)
 			self.go(choice)
 		else:

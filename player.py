@@ -6,6 +6,7 @@ class Player:
         self.x = newX   # x position of player
         self.y = newY   # y position of player
         self.size = 35
+        self.policyTable = dict()   # this will be a dictionary of (state : action) pairs. This will be updated by value iteration and q-learning
 
     def getActionVector(self, board):
         # helper function called by aiMove() to get a vector of valid directions from the player's current position.
