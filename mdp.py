@@ -1,0 +1,267 @@
+import state
+import objects
+import itertools
+import board
+import copy
+
+class MDP:
+
+    def __init__ (self, startingState):
+        self.currentState = startingState
+        self.states = list()    # contains all the valid states of the model
+        self.policyTable = dict()   # this will be a dictionary of (state : action) pairs. This will be updated by value iteration and q-learning
+        self.currentStateValues = dict()    # dictionary of (State : float) pairs. Used for value iteration. This will hold V_K values
+        self.rewardDiscount = 1.0
+        self.initializeStates() # initialize all the states that exist in the MDP
+        self.valueIteration()
+
+    def initializeStates(self):
+        # iterates over the board and creates every valid state that exists in the MDP.
+        # this is gonna be computationally expensive as shit.
+
+        # get all possible player, key, and wormhole positions. Positions are stored as a tuple of (x, y) coordinates.
+        # Note that these are ALL positions each of these items can occupy.
+        playerPos = list()
+        # wormholePos = list()
+        keyPos = list()
+
+        # get player positions
+        for x in range(0, len(objects.board.tiles)):
+            for y in range(0, len(objects.board.tiles[0])):
+
+                if objects.board.tiles[x][y].isWall() or objects.board.tiles[x][y].isLava():
+                    continue
+                
+                # if this tile is avalid player position, add it to list.
+                playerPos.append((x, y))   
+        
+        # get all valid combinations of key positions.
+        keyList = self.getKeyPositionCombinations()
+        
+        # get all valid wormhole combinations of positions
+        # wormholeList = self.getWormholePositionCombinations()
+        # stateList = list(itertools.product(playerPos, keyList, wormholeList))
+        
+        # populate list of all possible states
+        stateList = list(itertools.product(playerPos, keyList))
+        
+        for newState in stateList:
+            stateObj = state.State(newState[0], newState[1], None)
+            self.states.append(stateObj) # will change to state.State(state[0], state[1], state[2]) once wormholes are in.
+            self.currentStateValues[stateObj] = 0   # initialize state's value to 0 in the dictionary
+
+        self.currentStateValues[None] = 0   # this will be used for the exit state
+
+    def getActionVector(self, currentState, board):
+        # helper function called by valueIteration() to get a vector of valid directions from the position passed.
+        # NOTE: playerPos is a tuple of (x, y) type. So playerPos[0] gives x value and playerPos[1] gives y value
+        x = currentState.playerPos[0]
+        y = currentState.playerPos[1]
+
+        validMoves = ["Left", "Right", "Up", "Down", "Stay"]
+
+        if board.tiles[x][y].isExit() and all(val == None for val in currentState.keyPositions):
+            validMoves = ["Exit"]   # player is on exit and has all the keys, exit is the only right move.
+            return validMoves
+
+		# rule out which actions we can take depending on current and next x, y positions. Based on implementation in key.py
+        if x == 0 or board.tiles[x - 1][y].isWall():
+		    validMoves.remove("Left")
+        if x == board.width - 1 or board.tiles[x + 1][y].isWall():
+        	validMoves.remove("Right")
+        if y == 0 or board.tiles[x][y - 1].isWall():
+        	validMoves.remove("Up")
+        if y == board.height - 1 or board.tiles[x][y + 1].isWall():
+            validMoves.remove("Down")
+
+        return validMoves
+    
+    def getNextStateAndReward(self, originalState, action):
+        # calculates next state and reward value based on action taken in originalState
+        # value is returned as a tuple (nextState, rewardValue)
+
+        # these bools track if player died or got a key taking this action
+        
+        hasDied = False
+        gotKey = False
+        hasExited = False
+
+        totalReward = 0 # track the reward we end up getting for taking this action
+        xDirection = 0
+        yDirection = 0
+
+        # create temporary movement variables so player isn't actually effected
+        playerX = originalState.playerPos[0]
+        playerY = originalState.playerPos[1]
+        tempBoard = copy.copy(objects.board) # create a copy of the board
+        nextState = None
+        resultingKeyPositionList = copy.deepcopy(originalState.keyPositions) # this list will be updated if keys are acquired taking this action
+
+        if all(val == None for val in originalState.keyPositions) and tempBoard.tiles[playerX][playerY].isExit():
+            # handle case where player is on exit tile and has all the keys needed
+            return (None, 100) 
+
+        # assign keys to the board
+        for key in tempBoard.keys:
+            tempBoard.tiles[key.x][key.y].key = False
+        for keyPos in originalState.keyPositions:
+            if keyPos is None:
+                continue
+            tempBoard.tiles[keyPos[0]][keyPos[1]].key = True
+
+        # assign wormholes to the board
+        # for wormhole in tempBoard.wormholes:
+        #     wormhole.type = "empty"
+        # for wormholePos in originalState.wormholes:
+        #     tempBoard.tiles[wormholePos[0]][wormholePos[1]].type = "wormhole"
+
+        tempKeyCount = 0
+
+        for key in originalState.keyPositions:
+            if key == None:
+                tempKeyCount += 1 # if a key is set to None in the key vector, add to the key count
+
+        # note that the x, y origin is at the top-left, which is why UP is -1 in the y direction.
+        if action == "Down":
+            yDirection = 1
+        elif action == "Up":
+            yDirection = -1
+        elif action == "Right":
+            xDirection = 1
+        elif action == "Left":
+            xDirection = -1
+
+        if yDirection != 0:
+            while ((playerY + yDirection >= 0 and playerY + yDirection < tempBoard.height) and 
+            not (tempBoard.tiles[playerX][playerY + yDirection].isWall())):
+                playerY += yDirection
+
+                if tempBoard.tiles[playerX][playerY].hasKey():
+                    totalReward += 10
+
+                    # iterate over key position list and set the key that was acquired to None
+                    for index, keyPos in enumerate(resultingKeyPositionList):
+                        if keyPos is None:
+                            continue
+
+                        if keyPos[0] == playerX and keyPos[1] == playerY:
+                            resultingKeyPositionList[index] = None
+
+                if tempBoard.tiles[playerX][playerY].isLava():
+                    totalReward -= 1000
+            
+        elif xDirection != 0:
+            while ((playerX + xDirection >= 0 and playerX + xDirection < tempBoard.width) and 
+            not (tempBoard.tiles[playerX + xDirection][playerY].isWall())):
+                playerX += xDirection
+
+                if tempBoard.tiles[playerX][playerY].hasKey():
+                    totalReward += 10
+
+                    # iterate over key position list and set the key that was acquired to None
+                    for index, keyPos in enumerate(resultingKeyPositionList):
+                        if keyPos is None:
+                            continue
+
+                        if keyPos[0] == playerX and keyPos[1] == playerY:
+                            resultingKeyPositionList[index] = None
+
+                if tempBoard.tiles[playerX][playerY].isLava():
+                    totalReward -= 1000
+
+        nextState = state.State((playerX, playerY), resultingKeyPositionList, None)
+        return (nextState, totalReward)
+        
+
+    def valueIteration(self):
+        # perform value iteration
+        
+        # iterate 100 times over all states and update values
+        for i in range(0, 1):
+            for currentState in self.states:
+                actionVector = self.getActionVector(currentState, objects.board)
+                actionValues = dict()   # will track (action : value) key-value pairs. Will take argmax after getting all values
+                
+                # iterate over each action and append values to actionValues dictionary
+                for action in actionVector:
+                    # calculate T(s, a, s') * (R(s, a, s') + rewardDiscount(V_K(s')))
+                    # NOTE: all actions are 1.0 probability currently so we don't need to do summation
+                    nextState, reward = self.getNextStateAndReward(currentState, action)
+                    actionValues[action] = 1.0 * (reward + (self.rewardDiscount * self.currentStateValues[nextState]))
+
+                self.currentStateValues[currentState] = max(actionValues.values()) # Update state value to new values that were just calculated.
+                self.policyTable[currentState] = max(actionValues, key=actionValues.get) # update policy of currentState to the best action from the calculation
+
+    def getKeyPositionCombinations(self):
+        # get key positions for each key. We have min and max x,y positions for each key that must be considered
+        counter = 0
+        keyPos = [list() for x in range(0, len(objects.board.keys))]
+
+        for key in objects.board.keys:
+            for x in range(key.xmin, key.xmax + 1):
+                for y in range(key.ymin, key.ymax + 1):
+                    if objects.board.tiles[x][y].isWall():
+                        # wall tiles are not valid key positions
+                        continue
+
+                    keyPos[counter].append((x, y)) # add a position for this specific key.
+            
+            keyPos[counter].append(None)
+            counter += 1
+
+        # get cartesian product of all key positions. This gives us all possible key position combinations
+        keyCombos = list(set(itertools.product(*keyPos)))
+
+        # Find entries that contain duplicate positions. Keys cannot be on top of one another.
+        removeList = list()
+        for i in range(0, len(keyCombos)):
+            for j in range(0, len(objects.board.keys)):
+                for k in range(0, len(objects.board.keys)):
+                    if j == k:
+                        continue
+                    if keyCombos[i][j] == keyCombos[i][k] and (keyCombos[i][j] and keyCombos[i][k] != None):
+                        removeList.append(keyCombos[i])
+                        break
+
+        return [list(positions) for positions in keyCombos if positions not in removeList]
+        # print keyList
+
+    def getWormholePositionCombinations(self):
+        # get possible positions for each wormhole.
+        counter = 0
+        wormholePositions = [list() for x in range(0, len(objects.board.wormholes))]
+
+        for wormhole in objects.board.wormholes:
+            for x in range(0, len(objects.board.tiles)):
+                for y in range(0, len(objects.board.tiles[0])):
+                    if objects.board.tiles[x][y].isWall():
+                        # wall tiles are not valid key positions
+                        continue
+
+                    wormholePositions[counter].append((x, y)) # add a position for this specific key.
+            
+            counter += 1
+
+        # get cartesian product of all key positions. This gives us all possible key position combinations
+        wormholeCombos = list(set(itertools.product(*wormholePositions)))
+
+        # Find entries that contain duplicate positions. Keys cannot be on top of one another.
+        removeList = list()
+        for i in range(0, len(wormholeCombos)):
+            for j in range(0, len(objects.board.wormholes)):
+                for k in range(0, len(objects.board.wormholes)):
+                    if j == k:
+                        continue
+                    if wormholeCombos[i][j] == wormholeCombos[i][k]:
+                        removeList.append(wormholeCombos[i])
+                        break
+
+        return [positions for positions in wormholeCombos if positions not in removeList]
+
+    def updateCurrentState(self, player, keys, wormholes):
+        newState = state.State((player.x, player.y), [(key.x, key.y) for key in keys], wormholes)
+        self.currentState = newState
+
+    def getCurrentStateActionFromPolicy(self):
+        # returns the best action for the current state of the MDP
+        return self.policyTable[self.currentState]

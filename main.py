@@ -2,6 +2,7 @@ import objects
 import sys
 import random
 import state
+import mdp
 
 # player, board, and graphics are instantiated in objects.py file.
 
@@ -19,8 +20,9 @@ def main():
     # objects.player.move(None, random.choice(["Up", "Down", "Left", "Right"])) # Testing random player movement
 
     moveKeys()
-    objects.player.aiMove(objects.board, objects.graphics)
-    # objects.graphics.drawKeys()
+    objects.player.aiMove(objects.mdp.getCurrentStateActionFromPolicy(), objects.board, objects.graphics)
+    objects.graphics.drawKeys()
+    objects.mdp.updateCurrentState(objects.player, objects.board.keys, None)
     objects.graphics.root.after(1000, main) # pause for 10 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
 
 if __name__ == '__main__':

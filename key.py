@@ -43,6 +43,9 @@ class Key:
 			if self.direction in myMoves and len(myMoves) > 1: # check the length to ensure we will have a move to make after removing
 				myMoves.remove(self.direction)
 
+			if len(myMoves) == 0:
+				return
+				
 			choice = random.choice(myMoves)
 			self.go(choice)
 		else:

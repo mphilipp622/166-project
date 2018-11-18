@@ -23,6 +23,7 @@ class Board:
         self.playerPosition = (self.levelData["player"][1], self.levelData["player"][0]) # player starting position as (x, y) tuple
         self.exitKeysRequired = self.levelData["exit"]["keys"]
         self.keys = list()
+        self.wormholes = list()
         self.makeBoard()
 
     def makeBoard(self):
@@ -32,15 +33,17 @@ class Board:
 
         # populate static objects: walls, lava, and exit
 
-        for wall in self.levelData["walls"]:
-            x = wall["position"][0]
-            y = wall["position"][1]
-            self.tiles[x][y].type = "wall"
+        if "walls" in self.levelData:
+            for wall in self.levelData["walls"]:
+                x = wall["position"][0]
+                y = wall["position"][1]
+                self.tiles[x][y].type = "wall"
 
-        for deathTile in self.levelData["deathTiles"]:
-            x = deathTile["position"][0]
-            y = deathTile["position"][1]
-            self.tiles[x][y].type = "lava"
+        if "deathTiles" in self.levelData:
+            for deathTile in self.levelData["deathTiles"]:
+                x = deathTile["position"][0]
+                y = deathTile["position"][1]
+                self.tiles[x][y].type = "lava"
 
         exitX = self.levelData["exit"]["position"][0]
         exitY = self.levelData["exit"]["position"][1]
@@ -49,25 +52,28 @@ class Board:
 
         # Need to figure out how wormholes will be stored
 
-        for wormhole in self.levelData["wormholes"]:
-            entranceX = wormhole["positionEntrance"][0]
-            entranceY = wormhole["positionEntrance"][1]
-            exitX = wormhole["positionExit"][0]
-            exitY = wormhole["positionExit"][1]
-            entranceDirection = wormhole["directionEntrance"]
-            exitDirection = wormhole["directionExit"]
+        if "wormholes" in self.levelData:
+            for wormhole in self.levelData["wormholes"]:
+                entranceX = wormhole["positionEntrance"][0]
+                entranceY = wormhole["positionEntrance"][1]
+                exitX = wormhole["positionExit"][0]
+                exitY = wormhole["positionExit"][1]
+                entranceDirection = wormhole["directionEntrance"]
+                exitDirection = wormhole["directionExit"]
 
-            self.tiles[exitX][exitY] = portalExit.PortalExit(exitDirection)
-            self.tiles[entranceX][entranceY] = portal.Portal(entranceDirection, self.tiles[exitX][exitY])
+                self.tiles[exitX][exitY] = portalExit.PortalExit(exitDirection)
+                self.tiles[entranceX][entranceY] = portal.Portal(entranceDirection, self.tiles[exitX][exitY])
+                self.wormholes.append(self.tiles[entranceX][entranceY])
 
         # populate keys
 
-        for keyObj in self.levelData["keys"]:
-            x = keyObj["startingPosition"][0]
-            y = keyObj["startingPosition"][1]
-            xmin = keyObj["positionBoundsX"][0]
-            xmax = keyObj["positionBoundsX"][1]
-            ymin = keyObj["positionBoundsY"][0]
-            ymax = keyObj["positionBoundsY"][1]
-            self.tiles[x][y].key = True
-            self.keys.append(key.Key(x, y, xmin, xmax, ymin, ymax))
+        if "keys" in self.levelData:
+            for keyObj in self.levelData["keys"]:
+                x = keyObj["startingPosition"][0]
+                y = keyObj["startingPosition"][1]
+                xmin = keyObj["positionBoundsX"][0]
+                xmax = keyObj["positionBoundsX"][1]
+                ymin = keyObj["positionBoundsY"][0]
+                ymax = keyObj["positionBoundsY"][1]
+                self.tiles[x][y].key = True
+                self.keys.append(key.Key(x, y, xmin, xmax, ymin, ymax))

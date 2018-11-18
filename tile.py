@@ -38,4 +38,6 @@ class Tile:
 
     def isNotValidKeyTile(self):
         # This function returns true if a key can NOT go onto this tile
-        return (self.type == "wormhole" or self.type == "lava" or self.type == "wall" or self.type == "wormholeExit")
+        return (
+            self.hasKey() == True or self.type == "wormhole" or self.type == "lava" or self.type == "wall" or self.type == "wormholeExit"
+        )
