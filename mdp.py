@@ -38,7 +38,7 @@ class MDP:
         for x in range(0, len(objects.board.tiles)):
             for y in range(0, len(objects.board.tiles[0])):
 
-                if objects.board.tiles[x][y].isWall() or objects.board.tiles[x][y].isLava():
+                if objects.board.tiles[x][y].isWall():
                     continue
                 
                 # if this tile is avalid player position, add it to list.
@@ -60,6 +60,10 @@ class MDP:
             self.currentStateValues[stateObj] = 0   # initialize state's value to 0 in the dictionary
 
         self.currentStateValues[None] = 0   # this will be used for the exit state
+
+        # for key, val in self.currentStateValues.items():
+        #     print key
+        #     print val
 
     def getActionVector(self, currentState, board):
         # helper function called by valueIteration() to get a vector of valid directions from the position passed.
