@@ -3,6 +3,7 @@ import objects
 import itertools
 import board
 import copy
+import time
 
 class MDP:
 
@@ -15,7 +16,10 @@ class MDP:
         self.livingReward = -1
         self.iterations = 10
         self.initializeStates() # initialize all the states that exist in the MDP
+        start = time.time()
         self.valueIteration()
+        end = time.time()
+        print (end - start)
         # for key, val in self.currentStateValues.items():
         #     print key
         #     print val
@@ -281,5 +285,5 @@ class MDP:
 
     def getCurrentStateActionFromPolicy(self):
         # returns the best action for the current state of the MDP
-        print str(self.currentState) + " = " + str(self.currentStateValues[self.currentState])
+        # print str(self.currentState) + " = " + str(self.currentStateValues[self.currentState])
         return self.policyTable[self.currentState]
