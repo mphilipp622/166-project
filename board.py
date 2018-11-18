@@ -3,6 +3,7 @@ import portal
 import portalExit
 import json
 import key
+import objects
 
 class Board:
     
@@ -77,3 +78,13 @@ class Board:
                 ymax = keyObj["positionBoundsY"][1]
                 self.tiles[x][y].key = True
                 self.keys.append(key.Key(x, y, xmin, xmax, ymin, ymax))
+
+    def removeKey(self, xPos, yPos):
+        self.tiles[xPos][yPos].key = False
+        
+        # find the key that was acquired and set it to acquired
+        for key in self.keys:
+            if key.x == xPos and key.y == yPos:
+                key.acquired = True
+                objects.graphics.removeKey(key)
+                break

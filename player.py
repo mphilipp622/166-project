@@ -56,20 +56,37 @@ class Player:
             while ((self.y + yDirection >= 0 and self.y + yDirection < board.height) and 
             not (board.tiles[self.x][self.y + yDirection].isWall())):
                 self.y += yDirection
+
+                if board.tiles[self.x][self.y].hasKey():
+                    print "Player got Key"
+                    self.keyCount += 1
+                    board.removeKey(self.x, self.y)
+
                 graphics.moveCanvas(0, boardSize * yDirection)
                 
         elif xDirection != 0:
             while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and 
             not (board.tiles[self.x + xDirection][self.y].isWall())):
                 self.x += xDirection
+
+                if board.tiles[self.x][self.y].hasKey():
+                    print "Player got Key"
+                    self.keyCount += 1
+                    board.removeKey(self.x, self.y)
+                    
                 graphics.moveCanvas(boardSize * xDirection, 0)
 
+        
         #x and y positions after movement
         x1 = self.x * boardSize + boardSize / 2
         x2 = self.y * boardSize + boardSize / 2
 
         # render the line behind player
         graphics.drawLine(x0, y0, x1, x2)
+
+        if board.tiles[self.x][self.y].isExit() and self.keyCount >= board.exitKeysRequired:
+            print "Player Wins"
+            exit()
 
     def move(self, event, newDirection):
         # pass argument None for event if you aren't using keyboard to move player. E.G: move(None, "Up")

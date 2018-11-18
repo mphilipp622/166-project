@@ -11,9 +11,14 @@ class MDP:
         self.states = list()    # contains all the valid states of the model
         self.policyTable = dict()   # this will be a dictionary of (state : action) pairs. This will be updated by value iteration and q-learning
         self.currentStateValues = dict()    # dictionary of (State : float) pairs. Used for value iteration. This will hold V_K values
-        self.rewardDiscount = 1.0
+        self.rewardDiscount = 0.5
+        self.livingReward = -1
+        self.iterations = 10
         self.initializeStates() # initialize all the states that exist in the MDP
         self.valueIteration()
+        # for key, val in self.currentStateValues.items():
+        #     print key
+        #     print val
 
     def initializeStates(self):
         # iterates over the board and creates every valid state that exists in the MDP.
@@ -81,6 +86,13 @@ class MDP:
         # value is returned as a tuple (nextState, rewardValue)
 
         # these bools track if player died or got a key taking this action
+
+        if action == "Exit":
+            # if we can exit, return 100 reward
+            return (None, 100)
+        if action == "Stay":
+            # if we stay, return the state we were just in
+            return (originalState, 0)
         
         hasDied = False
         gotKey = False
@@ -93,13 +105,9 @@ class MDP:
         # create temporary movement variables so player isn't actually effected
         playerX = originalState.playerPos[0]
         playerY = originalState.playerPos[1]
-        tempBoard = copy.copy(objects.board) # create a copy of the board
+        tempBoard = copy.deepcopy(objects.board) # create a copy of the board
         nextState = None
         resultingKeyPositionList = copy.deepcopy(originalState.keyPositions) # this list will be updated if keys are acquired taking this action
-
-        if all(val == None for val in originalState.keyPositions) and tempBoard.tiles[playerX][playerY].isExit():
-            # handle case where player is on exit tile and has all the keys needed
-            return (None, 100) 
 
         # assign keys to the board
         for key in tempBoard.keys:
@@ -175,9 +183,10 @@ class MDP:
 
     def valueIteration(self):
         # perform value iteration
-        
         # iterate 100 times over all states and update values
-        for i in range(0, 1):
+        for i in range(0, self.iterations):
+            # grab our kth dictionary of values
+            previousStateValues = copy.deepcopy(self.currentStateValues)
             for currentState in self.states:
                 actionVector = self.getActionVector(currentState, objects.board)
                 actionValues = dict()   # will track (action : value) key-value pairs. Will take argmax after getting all values
@@ -187,7 +196,7 @@ class MDP:
                     # calculate T(s, a, s') * (R(s, a, s') + rewardDiscount(V_K(s')))
                     # NOTE: all actions are 1.0 probability currently so we don't need to do summation
                     nextState, reward = self.getNextStateAndReward(currentState, action)
-                    actionValues[action] = 1.0 * (reward + (self.rewardDiscount * self.currentStateValues[nextState]))
+                    actionValues[action] = 1.0 * (reward + (self.rewardDiscount * previousStateValues[nextState]))
 
                 self.currentStateValues[currentState] = max(actionValues.values()) # Update state value to new values that were just calculated.
                 self.policyTable[currentState] = max(actionValues, key=actionValues.get) # update policy of currentState to the best action from the calculation
@@ -259,9 +268,18 @@ class MDP:
         return [positions for positions in wormholeCombos if positions not in removeList]
 
     def updateCurrentState(self, player, keys, wormholes):
-        newState = state.State((player.x, player.y), [(key.x, key.y) for key in keys], wormholes)
+        keyVector = list()
+        for key in keys:
+            # check if the key has been acquired. If it has, we want to append None so the state can keep track properly
+            if key.acquired:
+                keyVector.append(None)
+            else:
+                keyVector.append((key.x, key.y))
+
+        newState = state.State((player.x, player.y), keyVector, wormholes)
         self.currentState = newState
 
     def getCurrentStateActionFromPolicy(self):
         # returns the best action for the current state of the MDP
+        print str(self.currentState) + " = " + str(self.currentStateValues[self.currentState])
         return self.policyTable[self.currentState]

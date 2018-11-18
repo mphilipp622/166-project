@@ -25,6 +25,7 @@ class Graphics:
 
         self.canvas.pack()
 
+        self.keys = dict()
         # self.keys = dict()
         # self.wormholes = dict()
 
@@ -38,6 +39,13 @@ class Graphics:
     def moveCanvas(self, xAmount, yAmount):
         # Called from player.move()
         self.canvas.move(self.playerGraphic, xAmount, yAmount)
+
+    def moveKey(self, key, xAmount, yAmount):
+        self.canvas.move(self.keys[key], xAmount, yAmount)
+
+    def removeKey(self, key):
+        self.canvas.delete(self.keys[key])
+        del self.keys[key]
 
     def updateBoard(self):
         # redraw the board
@@ -59,11 +67,12 @@ class Graphics:
                     self.canvas.itemconfig(rect, fill='purple')
                 elif objects.board.tiles[i][j].isWormholeExit():
                     self.canvas.itemconfig(rect, fill='green')
+                elif objects.board.tiles[i][j].isExit():
+                    self.canvas.itemconfig(rect, fill = "gold")
 
     def drawPlayer(self):
         boardSize = objects.board.size
         playerSize = objects.player.size
-        print(str(objects.player.x) + ", " + str(objects.player.y))
 
         self.playerGraphic = self.canvas.create_oval(objects.player.x *boardSize + (boardSize - playerSize) / 2,
 													objects.player.y*boardSize + (boardSize - playerSize) / 2, 
@@ -72,7 +81,16 @@ class Graphics:
 													fill='red')
     
     
+    def drawKeys(self):
+        boardSize = objects.board.size
+        playerSize = objects.player.size
 
+        for key in objects.board.keys:
+            self.keys[key] = self.canvas.create_oval(key.x *boardSize + (boardSize - playerSize) / 2,
+													key.y*boardSize + (boardSize - playerSize) / 2, 
+													key.x*boardSize + boardSize - (boardSize - playerSize) / 2, 
+													key.y*boardSize + boardSize - (boardSize - playerSize) / 2, 
+													fill='yellow')
 
     def initializeGraphics(self):
         # this function initializes the graphics and starts tkinter's main loop.
@@ -82,5 +100,6 @@ class Graphics:
 
         self.updateBoard()
         self.drawPlayer()
+        self.drawKeys()
         self.root.after(10, main.main) # after() allows us to say "after 10 ms, run main()". This allows us to make a game loop inside main.py
         self.root.mainloop()

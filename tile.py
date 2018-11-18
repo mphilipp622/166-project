@@ -12,8 +12,8 @@ class Tile:
     # "lava"
     # "empty"
     # "exit"
-    # "portalEntrance"
-    # "portalExit"
+    # "wormhole"
+    # "wormholeExit"
     
     def isWall(self):
         return self.type == "wall"
@@ -38,6 +38,7 @@ class Tile:
 
     def isNotValidKeyTile(self):
         # This function returns true if a key can NOT go onto this tile
-        return (
-            self.hasKey() == True or self.type == "wormhole" or self.type == "lava" or self.type == "wall" or self.type == "wormholeExit"
-        )
+        if self.type == "lava" or self.type == "wormhole" or self.type == "wall" or self.hasKey():
+            return True
+
+        return False 
