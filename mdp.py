@@ -7,15 +7,20 @@ import time
 
 class MDP:
 
-    def __init__ (self, startingState):
+    def __init__ (self, startingState, iterations = None):
         self.currentState = startingState
         self.states = list()    # contains all the valid states of the model
         self.policyTable = dict()   # this will be a dictionary of (state : action) pairs. This will be updated by value iteration and q-learning
         self.currentStateValues = dict()    # dictionary of (State : float) pairs. Used for value iteration. This will hold V_K values
+        self.transitionFunctions = dict()   # will contain (s,a) tuple for the key and returns a tuple of (nextState, probability)
+        self.rewardFunctions = dict()       # will contain (s,a,s') tuple for the key and a reward value   
         self.rewardDiscount = 0.5
         self.livingReward = -1
-        self.iterations = 10
+        self.iterations = iterations if iterations != None else 10
+
         self.initializeStates() # initialize all the states that exist in the MDP
+        self.initializeTransitionAndRewardFunctions()    # initialize T(s,a,s') and R(s,a,s') for all states and actions
+        # self.initializeRewardFunctions()    # initialize R(s,a,s') for all states and actions
         start = time.time()
         self.valueIteration()
         end = time.time()
@@ -64,6 +69,23 @@ class MDP:
         # for key, val in self.currentStateValues.items():
         #     print key
         #     print val
+
+    def initializeTransitionAndRewardFunctions(self):
+        for currentState in self.states:
+            actionVector = self.getActionVector(currentState, objects.board)
+            actionValues = dict()   # will track (action : value) key-value pairs. Will take argmax after getting all values
+            
+            # iterate over each action and append values to actionValues dictionary
+            for action in actionVector:
+                # calculate T(s, a, s') * (R(s, a, s') + rewardDiscount(V_K(s')))
+                # NOTE: all actions are 1.0 probability currently so we don't need to do summation
+                # nextState, probability = self.transitionFunctions(currentState, action)
+                # reward = self.rewardFunctions(currentState, action, nextState)
+                nextState, reward = self.getNextStateAndReward(currentState, action)
+                actionValues[action] = 1.0 * (reward + (self.rewardDiscount * previousStateValues[nextState]))
+                # actionValues[action] = probability * (reward + (self.rewardDiscount * previousStateValues[nextState]))
+
+        return
 
     def getActionVector(self, currentState, board):
         # helper function called by valueIteration() to get a vector of valid directions from the position passed.
@@ -186,9 +208,9 @@ class MDP:
                     totalReward -= 1000
 
         nextState = state.State((playerX, playerY), resultingKeyPositionList, None)
+        self.rewardFunctions[(originalState, action, nextState)] = totalReward
         return (nextState, totalReward)
         
-
     def valueIteration(self):
         # perform value iteration
         # iterate 100 times over all states and update values
@@ -203,8 +225,11 @@ class MDP:
                 for action in actionVector:
                     # calculate T(s, a, s') * (R(s, a, s') + rewardDiscount(V_K(s')))
                     # NOTE: all actions are 1.0 probability currently so we don't need to do summation
+                    # nextState, probability = self.transitionFunctions(currentState, action)
+                    # reward = self.rewardFunctions(currentState, action, nextState)
                     nextState, reward = self.getNextStateAndReward(currentState, action)
                     actionValues[action] = 1.0 * (reward + (self.rewardDiscount * previousStateValues[nextState]))
+                    # actionValues[action] = probability * (reward + (self.rewardDiscount * previousStateValues[nextState]))
 
                 self.currentStateValues[currentState] = max(actionValues.values()) # Update state value to new values that were just calculated.
                 self.policyTable[currentState] = max(actionValues, key=actionValues.get) # update policy of currentState to the best action from the calculation
