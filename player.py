@@ -50,6 +50,7 @@ class Player:
         x0 = self.x * boardSize + boardSize / 2
         y0 = self.y * boardSize + boardSize / 2
 
+        objects.board.tiles[self.x][self.y].player = False
         # handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving. 
         # Otherwise, keep moving and update graphics.
         if yDirection != 0:
@@ -76,7 +77,7 @@ class Player:
                     
                 graphics.moveCanvas(boardSize * xDirection, 0)
 
-        
+        objects.board.tiles[self.x][self.y].player = True
         #x and y positions after movement
         x1 = self.x * boardSize + boardSize / 2
         x2 = self.y * boardSize + boardSize / 2

@@ -9,18 +9,22 @@ class MDP:
 
     def __init__ (self, startingState, iterations = None):
         self.currentState = startingState
-        self.states = list()    # contains all the valid states of the model
-        self.policyTable = dict()   # this will be a dictionary of (state : action) pairs. This will be updated by value iteration and q-learning
+        self.states = list()                # contains all the valid states of the model
+        self.policyTable = dict()           # this will be a dictionary of (state : action) pairs. This will be updated by value iteration and q-learning
         self.currentStateValues = dict()    # dictionary of (State : float) pairs. Used for value iteration. This will hold V_K values
-        self.transitionFunctions = dict()   # will contain (s,a) tuple for the key and returns a tuple of (nextState, probability)
+        self.nextStates = dict()            # dictionary of (state, action) keys that returns the State that (s,a) will go to.
+        self.transitionFunctions = dict()   # will contain (s,a) tuple for the key and returns a list of (action, probability) tuples
         self.rewardFunctions = dict()       # will contain (s,a,s') tuple for the key and a reward value   
         self.rewardDiscount = 0.5
         self.livingReward = -1
+        self.intendedActionProbability = 0.8    # intended action succeeds 80% of the time
+        self.unintendedActionProbability = 0.2  # unintended action occurs 20% of the time. This will be split by the number of unintended actions available in a state
         self.iterations = iterations if iterations != None else 10
 
-        self.initializeStates() # initialize all the states that exist in the MDP
-        self.initializeTransitionAndRewardFunctions()    # initialize T(s,a,s') and R(s,a,s') for all states and actions
-        # self.initializeRewardFunctions()    # initialize R(s,a,s') for all states and actions
+        self.initializeStates()                         # initialize all the states that exist in the MDP
+        self.initializeNextStateTableAndRewardTable()   # initialize table of next states given original state and R(s,a,s') for all states and actions
+        self.initializeTransitionFunctions()            # initialize T(s,a,s') for all states and actions
+        
         start = time.time()
         self.valueIteration()
         end = time.time()
@@ -70,22 +74,38 @@ class MDP:
         #     print key
         #     print val
 
-    def initializeTransitionAndRewardFunctions(self):
+    def initializeNextStateTableAndRewardTable(self):
         for currentState in self.states:
-            actionVector = self.getActionVector(currentState, objects.board)
-            actionValues = dict()   # will track (action : value) key-value pairs. Will take argmax after getting all values
-            
-            # iterate over each action and append values to actionValues dictionary
-            for action in actionVector:
-                # calculate T(s, a, s') * (R(s, a, s') + rewardDiscount(V_K(s')))
-                # NOTE: all actions are 1.0 probability currently so we don't need to do summation
-                # nextState, probability = self.transitionFunctions(currentState, action)
-                # reward = self.rewardFunctions(currentState, action, nextState)
+            # iterate over all states
+            for action in self.getActionVector(currentState, objects.board):
                 nextState, reward = self.getNextStateAndReward(currentState, action)
-                actionValues[action] = 1.0 * (reward + (self.rewardDiscount * previousStateValues[nextState]))
-                # actionValues[action] = probability * (reward + (self.rewardDiscount * previousStateValues[nextState]))
+                self.nextStates[(currentState, action)] = nextState
+                self.rewardFunctions[(currentState, action, nextState)] = reward
 
-        return
+    def initializeTransitionFunctions(self):
+
+        # iterate over all the states
+        for newState in self.states:
+            actionVector = self.getActionVector(newState, objects.board)
+
+            if len(actionVector) == 1:
+                transitionProbabilityList = [(actionVector[0], 0.8)]
+                self.transitionFunctions[(newState, actionVector[0])] = transitionProbabilityList
+            else:
+                # set the main action to 80% probability and the rest to 20% / size of the remaining possible actions.
+                for action in actionVector:   
+                    mainAction = (action, self.intendedActionProbability)
+
+                    remainingProbability = self.unintendedActionProbability / (len(actionVector) - 1)    # calculates probability for any action that isn't the main action
+                    transitionProbabilityList = [mainAction]
+                    
+                    for newAction in actionVector:
+                        if newAction == action:
+                            continue
+                
+                    transitionProbabilityList.append((newAction, remainingProbability))
+            
+                    self.transitionFunctions[(newState, action)] = transitionProbabilityList
 
     def getActionVector(self, currentState, board):
         # helper function called by valueIteration() to get a vector of valid directions from the position passed.
@@ -123,10 +143,6 @@ class MDP:
         if action == "Stay":
             # if we stay, return the state we were just in
             return (originalState, 0)
-        
-        hasDied = False
-        gotKey = False
-        hasExited = False
 
         totalReward = 0 # track the reward we end up getting for taking this action
         xDirection = 0
@@ -208,7 +224,7 @@ class MDP:
                     totalReward -= 1000
 
         nextState = state.State((playerX, playerY), resultingKeyPositionList, None)
-        self.rewardFunctions[(originalState, action, nextState)] = totalReward
+        # self.rewardFunctions[(originalState, action, nextState)] = totalReward
         return (nextState, totalReward)
         
     def valueIteration(self):
@@ -217,6 +233,7 @@ class MDP:
         for i in range(0, self.iterations):
             # grab our kth dictionary of values
             previousStateValues = copy.deepcopy(self.currentStateValues)
+
             for currentState in self.states:
                 actionVector = self.getActionVector(currentState, objects.board)
                 actionValues = dict()   # will track (action : value) key-value pairs. Will take argmax after getting all values
@@ -224,12 +241,14 @@ class MDP:
                 # iterate over each action and append values to actionValues dictionary
                 for action in actionVector:
                     # calculate T(s, a, s') * (R(s, a, s') + rewardDiscount(V_K(s')))
-                    # NOTE: all actions are 1.0 probability currently so we don't need to do summation
-                    # nextState, probability = self.transitionFunctions(currentState, action)
-                    # reward = self.rewardFunctions(currentState, action, nextState)
-                    nextState, reward = self.getNextStateAndReward(currentState, action)
-                    actionValues[action] = 1.0 * (reward + (self.rewardDiscount * previousStateValues[nextState]))
-                    # actionValues[action] = probability * (reward + (self.rewardDiscount * previousStateValues[nextState]))
+                    actionValues[action] = 0
+
+                    # T(s,a,s') returns 0.8 for intented action and the remaining actions that are possible take up the remaining 20% combined.
+                    for newAction, probability in self.transitionFunctions[(currentState, action)]:
+                        # if intended action is right, right will succeed at 0.8, up, down, left, and stay will succeed with 0.05
+                        nextState = self.nextStates[(currentState, newAction)]
+                        reward = self.rewardFunctions[(currentState, newAction, nextState)]
+                        actionValues[action] += probability * (reward + (self.rewardDiscount * previousStateValues[nextState]))
 
                 self.currentStateValues[currentState] = max(actionValues.values()) # Update state value to new values that were just calculated.
                 self.policyTable[currentState] = max(actionValues, key=actionValues.get) # update policy of currentState to the best action from the calculation
