@@ -12,9 +12,9 @@ class Player:
 
         validMoves = ["Left", "Right", "Up", "Down", "Stay"]
 
-		# rule out which actions we can take depending on current and next x, y positions. Based on implementation in key.py
+    # rule out which actions we can take depending on current and next x, y positions. Based on implementation in key.py
         if self.x == 0 or board.tiles[self.x-1][self.y].isWall():
-		    validMoves.remove("Left")
+            validMoves.remove("Left")
         if self.x == board.width - 1 or board.tiles[self.x+1][self.y].isWall():
         	validMoves.remove("Right")
         if self.y == 0 or board.tiles[self.x][self.y-1].isWall():
@@ -57,9 +57,9 @@ class Player:
             while ((self.y + yDirection >= 0 and self.y + yDirection < board.height) and
             not (board.tiles[self.x][self.y + yDirection].isWall())):
                 # After movement in said direction, check for collision with wormhole
-                if (board.tiles[self.x][self.y + yDirection].isWormhole())):
-                    self.x = objects.board.tiles[self.x ][self.y].exitX
-                    self.y = objects.board.tiles[self.x ][self.y].exity
+                if (board.tiles[self.x][self.y + yDirection].isWormhole()):
+                    self.x = objects.board.tiles[self.x ][self.y].exit.exitX
+                    self.y = objects.board.tiles[self.x ][self.y].exit.exitY
                 self.y += yDirection
                 graphics.moveCanvas(0, boardSize * yDirection)
 
@@ -68,9 +68,9 @@ class Player:
             while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and
             not (board.tiles[self.x + xDirection][self.y].isWall())):
                 # After movement in said direction, check for collision with wormhole
-                if (board.tiles[self.x + xDirection][self.y].isWormhole())):
-                    self.x = objects.board.tiles[self.x ][self.y].exitX
-                    self.y = objects.board.tiles[self.x ][self.y].exity
+                if (board.tiles[self.x + xDirection][self.y].isWormhole()):
+                    self.x = objects.board.tiles[self.x ][self.y].exit.exitX
+                    self.y = objects.board.tiles[self.x ][self.y].exit.exitY
                 self.x += xDirection
                 graphics.moveCanvas(boardSize * xDirection, 0)
 

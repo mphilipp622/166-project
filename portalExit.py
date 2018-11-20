@@ -6,3 +6,5 @@ class PortalExit(tile.Tile):
         self.direction = newDirection
         self.type = "wormholeExit"
         self.key = False
+        self.exitX
+        self.exitY
