@@ -121,7 +121,7 @@ class MDP:
 
 		# rule out which actions we can take depending on current and next x, y positions. Based on implementation in key.py
         if x == 0 or board.tiles[x - 1][y].isWall():
-		    validMoves.remove("Left")
+            validMoves.remove("Left")
         if x == board.width - 1 or board.tiles[x + 1][y].isWall():
         	validMoves.remove("Right")
         if y == 0 or board.tiles[x][y - 1].isWall():
