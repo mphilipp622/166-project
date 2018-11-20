@@ -61,7 +61,6 @@ class Player:
                 self.y += yDirection
 
                 if board.tiles[self.x][self.y].hasKey():
-                    print "Player got Key"
                     self.keyCount += 1
                     board.removeKey(self.x, self.y)
                 if board.tiles[self.x][self.y].isLava():
@@ -77,11 +76,10 @@ class Player:
                 self.x += xDirection
 
                 if board.tiles[self.x][self.y].hasKey():
-                    print "Player got Key"
                     self.keyCount += 1
                     board.removeKey(self.x, self.y)
                 if board.tiles[self.x][self.y].isLava():
-                    print "Player Died"
+                    print("Player Died")
                     time.sleep(1)
                     main.restart()
                     
@@ -96,7 +94,7 @@ class Player:
         graphics.drawLine(x0, y0, x1, x2)
 
         if board.tiles[self.x][self.y].isExit() and self.keyCount >= board.exitKeysRequired:
-            print "Player Wins"
+            print("Player Wins")
             time.sleep(1)
             main.restart()
 
