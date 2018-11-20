@@ -35,6 +35,16 @@ class Graphics:
         time.sleep(.2)
         self.canvas.delete(line)
 
+    def teleportPlayer(self, newX, newY):
+        boardSize = objects.board.size
+        playerSize = objects.player.size
+        x1 = newX * boardSize + (boardSize - playerSize) / 2
+        y1 = newY * boardSize + (boardSize - playerSize) / 2
+        x2 = newX * boardSize + boardSize - (boardSize - playerSize) / 2
+        y2 = newY * boardSize + boardSize - (boardSize - playerSize) / 2
+													
+        self.canvas.coords(self.playerGraphic, x1, y1, x2, y2)
+
     def moveCanvas(self, xAmount, yAmount):
         # Called from player.move()
         self.canvas.move(self.playerGraphic, xAmount, yAmount)

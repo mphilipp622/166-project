@@ -23,6 +23,7 @@ class Board:
         self.playerPosition = (self.levelData["player"][1], self.levelData["player"][0]) # player starting position as (x, y) tuple
         self.exitKeysRequired = self.levelData["exit"]["keys"]
         self.keys = list()
+        self.wormholes = dict()
         self.makeBoard()
 
     def makeBoard(self):
@@ -59,6 +60,7 @@ class Board:
 
             self.tiles[exitX][exitY] = portalExit.PortalExit(exitDirection, exitX, exitY)
             self.tiles[entranceX][entranceY] = portal.Portal(entranceDirection, self.tiles[exitX][exitY])
+            self.wormholes[(entranceX, entranceY)] = self.tiles[entranceX][entranceY]
 
         # populate keys
 

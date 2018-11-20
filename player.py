@@ -58,8 +58,10 @@ class Player:
             not (board.tiles[self.x][self.y + yDirection].isWall())):
                 # After movement in said direction, check for collision with wormhole
                 if (board.tiles[self.x][self.y + yDirection].isWormhole()):
-                    self.x = objects.board.tiles[self.x ][self.y].exit.exitX
-                    self.y = objects.board.tiles[self.x ][self.y].exit.exitY
+                    wormhole = objects.board.wormholes[(self.x + xDirection, self.y)]
+                    self.x = wormhole.exit.exitX
+                    self.y = wormhole.exit.exitY
+
                 self.y += yDirection
                 graphics.moveCanvas(0, boardSize * yDirection)
 
@@ -69,8 +71,11 @@ class Player:
             not (board.tiles[self.x + xDirection][self.y].isWall())):
                 # After movement in said direction, check for collision with wormhole
                 if (board.tiles[self.x + xDirection][self.y].isWormhole()):
-                    self.x = objects.board.tiles[self.x ][self.y].exit.exitX
-                    self.y = objects.board.tiles[self.x ][self.y].exit.exitY
+                    print("WORMHOLE")
+                    wormhole = objects.board.wormholes[(self.x + xDirection, self.y)]
+                    self.x = wormhole.exit.exitX
+                    self.y = wormhole.exit.exitY
+
                 self.x += xDirection
                 graphics.moveCanvas(boardSize * xDirection, 0)
 
@@ -105,17 +110,35 @@ class Player:
         x0 = self.x * boardSize + boardSize / 2
         y0 = self.y * boardSize + boardSize / 2
 
+        xDifference = 0
+        yDifference = 0
+
         # handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving.
         # Otherwise, keep moving and update graphics.
         if yDirection != 0:
             while ((self.y + yDirection >= 0 and self.y + yDirection < objects.board.height) and
             not (objects.board.tiles[self.x][self.y + yDirection].isWall())):
+                if (objects.board.tiles[self.x][self.y + yDirection].isWormhole()):
+                    wormhole = objects.board.wormholes[(self.x + xDirection, self.y)]
+                    xDifference = wormhole.exit.exitX - self.x
+                    yDifference = wormhole.exit.exitY - self.y
+                    self.x = wormhole.exit.exitX
+                    self.y = wormhole.exit.exitY
+                    objects.graphics.teleportPlayer(self.x, self.y)
+
                 self.y += yDirection
                 objects.graphics.moveCanvas(0, boardSize * yDirection)
 
         elif xDirection != 0:
             while ((self.x + xDirection >= 0 and self.x + xDirection < objects.board.width) and
             not (objects.board.tiles[self.x + xDirection][self.y].isWall())):
+                if (objects.board.tiles[self.x + xDirection][self.y].isWormhole()):
+                    wormhole = objects.board.wormholes[(self.x + xDirection, self.y)]
+                    
+                    self.x = wormhole.exit.exitX
+                    self.y = wormhole.exit.exitY
+                    objects.graphics.teleportPlayer(self.x, self.y)
+
                 self.x += xDirection
                 objects.graphics.moveCanvas(boardSize * xDirection, 0)
 
