@@ -1,11 +1,13 @@
 # import portal
 
 class Tile:
-    
-    def __init__(self, tileType):    
+
+    def __init__(self, tileType):
         # portalExit defaults to nothing unless specified during instantiation.
         self.type = tileType
         self.key = False
+        self.exitX
+        self.exitY
 
     # tileType should be one of the following:
     # "wall"
@@ -14,7 +16,7 @@ class Tile:
     # "exit"
     # "portalEntrance"
     # "portalExit"
-    
+
     def isWall(self):
         return self.type == "wall"
 

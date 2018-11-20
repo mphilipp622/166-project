@@ -26,7 +26,7 @@ class Player:
 
     def aiMove(self, board, graphics):
         # This function will be run in main.py main() function in the game loop.
-        # board and graphics are the same as objects.board and objects.graphics. 
+        # board and graphics are the same as objects.board and objects.graphics.
         # They're being passed to this function from main.py main() function
 
         boardSize = board.size  # grab the board size of the current board
@@ -51,19 +51,29 @@ class Player:
         x0 = self.x * boardSize + boardSize / 2
         y0 = self.y * boardSize + boardSize / 2
 
-        # handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving. 
+        # handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving.
         # Otherwise, keep moving and update graphics.
         if yDirection != 0:
-            while ((self.y + yDirection >= 0 and self.y + yDirection < board.height) and 
+            while ((self.y + yDirection >= 0 and self.y + yDirection < board.height) and
             not (board.tiles[self.x][self.y + yDirection].isWall())):
+                # After movement in said direction, check for collision with wormhole
+                if (board.tiles[self.x][self.y + yDirection].isWormhole())):
+                    self.x = objects.board.tiles[self.x ][self.y].exitX
+                    self.y = objects.board.tiles[self.x ][self.y].exity
                 self.y += yDirection
                 graphics.moveCanvas(0, boardSize * yDirection)
-                
+
+
         elif xDirection != 0:
-            while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and 
+            while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and
             not (board.tiles[self.x + xDirection][self.y].isWall())):
+                # After movement in said direction, check for collision with wormhole
+                if (board.tiles[self.x + xDirection][self.y].isWormhole())):
+                    self.x = objects.board.tiles[self.x ][self.y].exitX
+                    self.y = objects.board.tiles[self.x ][self.y].exity
                 self.x += xDirection
                 graphics.moveCanvas(boardSize * xDirection, 0)
+
 
         #x and y positions after movement
         x1 = self.x * boardSize + boardSize / 2
@@ -95,16 +105,16 @@ class Player:
         x0 = self.x * boardSize + boardSize / 2
         y0 = self.y * boardSize + boardSize / 2
 
-        # handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving. 
+        # handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving.
         # Otherwise, keep moving and update graphics.
         if yDirection != 0:
-            while ((self.y + yDirection >= 0 and self.y + yDirection < objects.board.height) and 
+            while ((self.y + yDirection >= 0 and self.y + yDirection < objects.board.height) and
             not (objects.board.tiles[self.x][self.y + yDirection].isWall())):
                 self.y += yDirection
                 objects.graphics.moveCanvas(0, boardSize * yDirection)
-                
+
         elif xDirection != 0:
-            while ((self.x + xDirection >= 0 and self.x + xDirection < objects.board.width) and 
+            while ((self.x + xDirection >= 0 and self.x + xDirection < objects.board.width) and
             not (objects.board.tiles[self.x + xDirection][self.y].isWall())):
                 self.x += xDirection
                 objects.graphics.moveCanvas(boardSize * xDirection, 0)

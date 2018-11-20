@@ -5,9 +5,9 @@ import json
 import key
 
 class Board:
-    
+
     def __init__(self, filename):
-        
+
         # open the json file and store it into levelData
         try:
             with open(filename) as f:
@@ -26,7 +26,7 @@ class Board:
         self.makeBoard()
 
     def makeBoard(self):
-        
+
         # board should be [x][y]
         self.tiles = [[tile.Tile("empty") for y in range(self.height)] for x in range(self.width)]
 
@@ -59,6 +59,8 @@ class Board:
 
             self.tiles[exitX][exitY] = portalExit.PortalExit(exitDirection)
             self.tiles[entranceX][entranceY] = portal.Portal(entranceDirection, self.tiles[exitX][exitY])
+            self.tiles[entranceX][entranceY].exitX = exitX
+            self.tiles[entranceX][entranceY].exitY = exitY
 
         # populate keys
 
