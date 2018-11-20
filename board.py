@@ -57,10 +57,8 @@ class Board:
             entranceDirection = wormhole["directionEntrance"]
             exitDirection = wormhole["directionExit"]
 
-            self.tiles[exitX][exitY] = portalExit.PortalExit(exitDirection)
+            self.tiles[exitX][exitY] = portalExit.PortalExit(exitDirection, exitX, exitY)
             self.tiles[entranceX][entranceY] = portal.Portal(entranceDirection, self.tiles[exitX][exitY])
-            self.tiles[entranceX][entranceY].exitX = exitX
-            self.tiles[entranceX][entranceY].exitY = exitY
 
         # populate keys
 

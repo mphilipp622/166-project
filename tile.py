@@ -6,8 +6,7 @@ class Tile:
         # portalExit defaults to nothing unless specified during instantiation.
         self.type = tileType
         self.key = False
-        self.exitX
-        self.exitY
+
 
     # tileType should be one of the following:
     # "wall"

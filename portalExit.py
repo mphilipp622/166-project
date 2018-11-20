@@ -2,9 +2,9 @@ import tile
 
 class PortalExit(tile.Tile):
 
-    def __init__(self, newDirection):
+    def __init__(self, newDirection, exitX, exitY):
         self.direction = newDirection
         self.type = "wormholeExit"
         self.key = False
-        self.exitX
-        self.exitY
+        self.exitX = exitX
+        self.exitY = exitY
