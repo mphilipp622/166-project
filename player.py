@@ -64,7 +64,7 @@ class Player:
                     self.keyCount += 1
                     board.removeKey(self.x, self.y)
                 if board.tiles[self.x][self.y].isLava():
-                    print "Player Died"
+                    print("Player Died")
                     time.sleep(1)
                     main.restart()
 

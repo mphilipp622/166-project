@@ -38,7 +38,7 @@ def moveKeys():
 # 			print 'main.py -i <jsonFile> ai=<v or q> rewardDiscount=<0 - 1> livingReward=<value> iterations=<value> learningRate=<value>'
 # 			sys.exit(2)
 # 		for opt, arg in opts:
-# 			if opt == '-h':
+# 			if opt == '-i':
 # 				print 'test.py -i <inputfile> -o <outputfile>'
 # 				sys.exit()
 # 			elif opt in ("-i", "--ifile"):
