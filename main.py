@@ -32,26 +32,26 @@ def parseArguments():
             print("error: AI algorithm type not specified. Please use 'v' for value iteration or 'q' for q-learning")
             exit()
 
-        try:
-            opts, args = getopt.getopt(argv,"i:",["ai=","rewardDiscount=", "livingReward=", "iterations=","learningRate="])
-        except getopt.GetoptError:
-            print 'main.py -i <jsonFile> ai=<v or q> rewardDiscount=<0 - 1> livingReward=<value> iterations=<value> learningRate=<value>'
-            sys.exit(2)
-        for opt, arg in opts:
-            if opt == '-i':
-                print 'test.py -i <inputfile> -o <outputfile>'
-                sys.exit()
-            elif opt in ("-i", "--ifile"):
-                inputfile = arg
-            elif opt in ("-o", "--ofile"):
-                outputfile = arg
-        print 'Input file is "', inputfile
+        
+        # try:
+        #     opts, args = getopt.getopt(argv,"i:",["ai=","rewardDiscount=", "livingReward=", "iterations=","learningRate="])
+        # except getopt.GetoptError:
+        #     print 'main.py -i <jsonFile> ai=<v or q> rewardDiscount=<0 - 1> livingReward=<value> iterations=<value> learningRate=<value>'
+        #     sys.exit(2)
+        # for opt, arg in opts:
+        #     if opt == '-i':
+        #         print 'test.py -i <inputfile> -o <outputfile>'
+        #         sys.exit()
+        #     elif opt in ("-i", "--ifile"):
+        #         inputfile = arg
+        #     elif opt in ("-o", "--ofile"):
+        #         outputfile = arg
+        # print 'Input file is "', inputfile
 
     else:
         print("error: not enough arguments provided. Provide level json file followed by string 'v' or 'q' for value iteration or q-learning respectively")
         exit()
 
-    return
 
 def main():
     # Main Game Loop. Enemy movement, wormhole movement, player movement all go here
