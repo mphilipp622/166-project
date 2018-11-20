@@ -4,6 +4,7 @@ import portalExit
 import json
 import key
 import objects
+import state
 
 class Board:
     
@@ -21,7 +22,7 @@ class Board:
         self.height = self.levelData["height"]
         self.width = self.levelData["width"]
         self.size = self.levelData["tileSize"]
-        self.playerPosition = (self.levelData["player"][1], self.levelData["player"][0]) # player starting position as (x, y) tuple
+        self.playerPosition = (self.levelData["player"][0], self.levelData["player"][1]) # player starting position as (x, y) tuple
         self.exitKeysRequired = self.levelData["exit"]["keys"]
         self.keys = list()
         self.wormholes = list()

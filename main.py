@@ -8,7 +8,15 @@ import mdp
 
 def start():
     # initialize tkinter graphics
+    objects.initialize()
     objects.graphics.initializeGraphics()
+
+def restart():
+    # called on by player.aiMove() function if exit condition is met
+    objects.graphics.quit()
+    objects.initialize()
+    objects.graphics.initializeGraphics()
+
 
 def moveKeys():
     for key in objects.board.keys:
@@ -19,6 +27,8 @@ def main():
 
     # objects.player.move(None, random.choice(["Up", "Down", "Left", "Right"])) # Testing random player movement
 
+    # if qlearning
+    #   objects.player.aiMove(objects.qLearn.getCurrentStateActionFromPolicy(), objects.board, objects.graphics)
 	objects.player.aiMove(objects.mdp.getCurrentStateActionFromPolicy(), objects.board, objects.graphics)
 	moveKeys()
 	objects.mdp.updateCurrentState(objects.player, objects.board.keys, None)

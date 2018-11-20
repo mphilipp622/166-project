@@ -1,5 +1,7 @@
 import objects
 import random
+import time
+import main
 
 class Player:
     def __init__(self, newX, newY):
@@ -62,6 +64,10 @@ class Player:
                     print "Player got Key"
                     self.keyCount += 1
                     board.removeKey(self.x, self.y)
+                if board.tiles[self.x][self.y].isLava():
+                    print "Player Died"
+                    time.sleep(1)
+                    main.restart()
 
                 graphics.moveCanvas(0, boardSize * yDirection)
                 
@@ -74,6 +80,10 @@ class Player:
                     print "Player got Key"
                     self.keyCount += 1
                     board.removeKey(self.x, self.y)
+                if board.tiles[self.x][self.y].isLava():
+                    print "Player Died"
+                    time.sleep(1)
+                    main.restart()
                     
                 graphics.moveCanvas(boardSize * xDirection, 0)
 
@@ -87,7 +97,9 @@ class Player:
 
         if board.tiles[self.x][self.y].isExit() and self.keyCount >= board.exitKeysRequired:
             print "Player Wins"
-            exit()
+            time.sleep(1)
+            main.restart()
+
 
     def move(self, event, newDirection):
         # pass argument None for event if you aren't using keyboard to move player. E.G: move(None, "Up")

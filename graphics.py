@@ -26,6 +26,8 @@ class Graphics:
         self.canvas.pack()
 
         self.keys = dict()
+
+        # self.initializeGraphics()
         # self.keys = dict()
         # self.wormholes = dict()
 
@@ -85,6 +87,8 @@ class Graphics:
         boardSize = objects.board.size
         playerSize = objects.player.size
 
+        self.keys.clear()   # clear any keys so that we can reset graphics without closing program.
+
         for key in objects.board.keys:
             self.keys[key] = self.canvas.create_oval(key.x *boardSize + (boardSize - playerSize) / 2,
 													key.y*boardSize + (boardSize - playerSize) / 2, 
@@ -103,3 +107,6 @@ class Graphics:
         self.drawKeys()
         self.root.after(10, main.main) # after() allows us to say "after 10 ms, run main()". This allows us to make a game loop inside main.py
         self.root.mainloop()
+
+    def quit(self):
+        self.root.destroy()
