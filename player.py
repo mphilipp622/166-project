@@ -7,7 +7,7 @@ class Player:
     def __init__(self, newX, newY):
         self.x = newX   # x position of player
         self.y = newY   # y position of player
-        self.size = 35
+        self.size = objects.board.size / 1.75
         self.keyCount = 0
 
     # def getActionVector(self, board):
@@ -26,6 +26,9 @@ class Player:
     #         validMoves.remove("Down")
 
     #     return validMoves
+
+    def aiQMove(self, action, board, graphics):
+        
 
     def aiMove(self, action, board, graphics):
         # This function will be run in main.py main() function in the game loop.
@@ -65,7 +68,7 @@ class Player:
                     board.removeKey(self.x, self.y)
                 if board.tiles[self.x][self.y].isLava():
                     print("Player Died")
-                    time.sleep(1)
+                    time.sleep(0.1)
                     main.restart()
 
                 graphics.moveCanvas(0, boardSize * yDirection)
@@ -80,7 +83,7 @@ class Player:
                     board.removeKey(self.x, self.y)
                 if board.tiles[self.x][self.y].isLava():
                     print("Player Died")
-                    time.sleep(1)
+                    time.sleep(0.1)
                     main.restart()
                     
                 graphics.moveCanvas(boardSize * xDirection, 0)
@@ -95,7 +98,7 @@ class Player:
 
         if board.tiles[self.x][self.y].isExit() and self.keyCount >= board.exitKeysRequired:
             print("Player Wins")
-            time.sleep(1)
+            time.sleep(0.1)
             main.restart()
 
 

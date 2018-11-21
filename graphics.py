@@ -14,7 +14,8 @@ class Graphics:
         self.root = Tk()                     #This creates a window, but it won't show up
         self.root.wm_title("CSCI 166 Project       by: Joshua Holland") #Makes the title that will appear in the top left
         self.root.geometry("%dx%d+%d+%d" % (objects.board.width * objects.board.size, objects.board.height * objects.board.size, 130, 100))
-
+        self.playerGraphic = None
+        self.job = None
         self.canvas = Canvas(self.root, width = objects.board.width * objects.board.size, height= objects.board.height * objects.board.size, background = 'black')
 
         # initialize keyboard listeners and assign them to player movement function
@@ -75,6 +76,9 @@ class Graphics:
     def drawPlayer(self):
         boardSize = objects.board.size
         playerSize = objects.player.size
+        
+        if self.playerGraphic:
+            del self.playerGraphic
 
         self.playerGraphic = self.canvas.create_oval(objects.player.x *boardSize + (boardSize - playerSize) / 2,
 													objects.player.y*boardSize + (boardSize - playerSize) / 2, 
@@ -105,7 +109,17 @@ class Graphics:
         self.updateBoard()
         self.drawPlayer()
         self.drawKeys()
-        self.root.after(10, main.main) # after() allows us to say "after 10 ms, run main()". This allows us to make a game loop inside main.py
+        self.job = self.root.after(10, main.main) # after() allows us to say "after 10 ms, run main()". This allows us to make a game loop inside main.py
+        self.root.mainloop()
+
+    def redrawBoard(self):
+        import main
+
+        self.root.after_cancel(self.job)
+        self.updateBoard()
+        self.drawPlayer()
+        self.drawKeys()
+        self.job = self.root.after(100, main.main)
         self.root.mainloop()
 
     def quit(self):
