@@ -8,6 +8,8 @@ try:
 except ImportError:
     from Tkinter import *   # handles python 2 compiler
 
+from PIL import Image, ImageTk
+
 class Graphics:
 
     def __init__(self):
@@ -15,7 +17,7 @@ class Graphics:
         self.root.wm_title("CSCI 166 Project       by: Joshua Holland") #Makes the title that will appear in the top left
         self.root.geometry("%dx%d+%d+%d" % (objects.board.width * objects.board.size, objects.board.height * objects.board.size, 130, 100))
 
-        self.canvas = Canvas(self.root, width = objects.board.width * objects.board.size, height= objects.board.height * objects.board.size, background = 'black')
+        self.canvas = Canvas(self.root, width = objects.board.width * objects.board.size, height= objects.board.height * objects.board.size)
 
         # initialize keyboard listeners and assign them to player movement function
         self.root.bind("<Up>", lambda event: objects.player.move(event, newDirection = "Up"))
@@ -27,6 +29,15 @@ class Graphics:
 
         # self.keys = dict()
         # self.wormholes = dict()
+
+    def drawBackground(self):
+        self.canvas.pack(fill=BOTH, expand=1)
+        img = Image.open("./assets/background.jpg")
+        img = img.resize((objects.board.height*objects.board.size, objects.board.width*objects.board.size))
+        self.background = ImageTk.PhotoImage(img)
+        self.backgroundPic = self.canvas.create_image(0, 0, anchor=NW, image=self.background)
+        self.canvas.pack(fill=BOTH, expand=1)
+
 
     def drawLine(self, x0, y0, x1, x2):
         # renders line behind player after movement
@@ -40,36 +51,79 @@ class Graphics:
         self.canvas.move(self.playerGraphic, xAmount, yAmount)
 
     def updateBoard(self):
+        tileSize = objects.board.size
+        boardHeight = objects.board.height
+        boardWidth = objects.board.width
         # redraw the board
         self.canvas.delete("all")
+        self.drawBackground()
 
-        for i in range(objects.board.width):
-            for j in range(objects.board.height):
-                xpos = i * objects.board.size
-                ypos = j * objects.board.size
-                rect = self.canvas.create_rectangle(xpos, ypos, xpos + objects.board.size, ypos + objects.board.size, fill='#FFF')
+        for i in range(boardWidth):
+            for j in range(boardHeight):
+                xpos = i * tileSize
+                ypos = j * tileSize
 
                 if objects.board.tiles[i][j].isWall():
-                    self.canvas.itemconfig(rect, fill='black')
-                elif objects.board.tiles[i][j].isEmpty(): 
-                    self.canvas.itemconfig(rect, fill='white')
-                elif objects.board.tiles[i][j].isLava():
-                    self.canvas.itemconfig(rect, fill='red')
+                    rect = self.canvas.create_rectangle(xpos, ypos, xpos + tileSize, ypos + tileSize, fill='black')
+                #elif objects.board.tiles[i][j].isEmpty(): 
+                    #self.canvas.itemconfig(rect, fill='white')
+                if objects.board.tiles[i][j].isLava():
+                    rect = self.canvas.create_rectangle(xpos, ypos, xpos + tileSize, ypos + tileSize, fill='red')
                 elif objects.board.tiles[i][j].isWormhole():
-                    self.canvas.itemconfig(rect, fill='purple')
+                    self.canvas.pack(fill=BOTH, expand=1)
+                    if objects.board.tiles[i][j].direction == "up":
+                        img = Image.open("./assets/enterUp.png")
+                    elif objects.board.tiles[i][j].direction == "down":
+                        img = Image.open("./assets/enterDown.png")
+                    elif objects.board.tiles[i][j].direction == "left":
+                        img = Image.open("./assets/enterLeft.png")
+                    elif objects.board.tiles[i][j].direction == "right":
+                        img = Image.open("./assets/enterRight.png")
+                    img = img.resize((60,60))
+                    self.wormhole = ImageTk.PhotoImage(img)
+                    self.canvas.create_image(   xpos + (tileSize/2),
+                                                ypos + (tileSize/2),
+                                                anchor=CENTER, image=self.wormhole)
+                    self.canvas.pack(fill=BOTH, expand=1)
                 elif objects.board.tiles[i][j].isWormholeExit():
-                    self.canvas.itemconfig(rect, fill='green')
+                    self.canvas.pack(fill=BOTH, expand=1)
+                    if objects.board.tiles[i][j].direction == "up":
+                        img = Image.open("./assets/exitUp.png")
+                    elif objects.board.tiles[i][j].direction == "down":
+                        img = Image.open("./assets/exitDown.png")
+                    elif objects.board.tiles[i][j].direction == "left":
+                        img = Image.open("./assets/exitLeft.png")
+                    elif objects.board.tiles[i][j].direction == "right":
+                        img = Image.open("./assets/exitRight.png")
+                    img = img.resize((tileSize,tileSize))
+                    self.exitGraphic = ImageTk.PhotoImage(img)
+                    self.canvas.create_image(   xpos + (tileSize/2),
+                                                ypos + (tileSize/2),
+                                                anchor=CENTER, image=self.exitGraphic)
+                    self.canvas.pack(fill=BOTH, expand=1)
 
     def drawPlayer(self):
-        boardSize = objects.board.size
+        tileSize = objects.board.size
         playerSize = objects.player.size
         print(str(objects.player.x) + ", " + str(objects.player.y))
 
+        #image stuff
+        self.canvas.pack(fill=BOTH, expand=1)
+        img = Image.open("./assets/star.jpg")
+        img = img.resize((playerSize,playerSize))
+        self.pic = ImageTk.PhotoImage(img)
+        self.playerGraphic = self.canvas.create_image(  objects.player.x * tileSize + tileSize/2,
+                                                        objects.player.y * tileSize + tileSize/2,
+                                                        anchor=CENTER, image=self.pic)
+        self.canvas.pack(fill=BOTH, expand=1)
+
+        """
         self.playerGraphic = self.canvas.create_oval(objects.player.x *boardSize + (boardSize - playerSize) / 2,
 													objects.player.y*boardSize + (boardSize - playerSize) / 2, 
 													objects.player.x*boardSize + boardSize - (boardSize - playerSize) / 2, 
 													objects.player.y*boardSize + boardSize - (boardSize - playerSize) / 2, 
 													fill='red')
+        """
     
     
 
