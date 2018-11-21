@@ -155,6 +155,7 @@ class MDP:
         nextState = None
         resultingKeyPositionList = copy.deepcopy(originalState.keyPositions) # this list will be updated if keys are acquired taking this action
 
+        # initialize a simulated world to figure out state values
         # assign keys to the board
         for key in tempBoard.keys:
             tempBoard.tiles[key.x][key.y].key = False

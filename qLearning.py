@@ -1,6 +1,7 @@
 import objects
 import itertools
 import state
+import random
 
 class QLearn:
 
@@ -14,7 +15,8 @@ class QLearn:
 		self.livingReward = livingReward
 		self.learningRate = learningRate
 		self.epsilon = epsilon
-  
+
+		self.policyTable = dict()			  # store policies using state as a key, which returns an action
 		self.qTable = dict()    # will store q values using (state, action) keys and a floating point value
 
 		self.initializeStates()                         # initialize all the states that exist in the MDP
@@ -125,14 +127,21 @@ class QLearn:
 		return
 
 	def updateState(self, rewardReceived):
+		# will be called by player.aiQMove()
 		# Q_k+1(s, a) = (1 - learningRate)(Q_k(s, a)) + learningRate(R(s, a, s') + rewardDiscount(max_a'(Q_k(s', a'))))
 		newState = state.State((objects.player.x, objects.player.y), [(key.x, key.y) for key in objects.board.keys], None)
-
+		
 		self.currentState = newState
 		return
 
 	def getCurrentStateActionFromPolicy(self):
-		return
+
+		if random.random() <= self.epsilon:
+			# handle exploration by randomizing our action we take if we RNG epsilon
+			return random.choice(self.getActionVector(self.currentState, objects.board))
+		
+		# if we don't RNG epsilon for exploration, then return the best action from our policy so far
+		return self.qTable[]
 
 	# def updateCurrentState(self, player, keys, wormholes):
 	# 	keyVector = list()

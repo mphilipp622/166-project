@@ -78,7 +78,7 @@ class Graphics:
                     rect = self.canvas.create_rectangle(xpos, ypos, xpos + tileSize, ypos + tileSize, fill='black')
                 #elif objects.board.tiles[i][j].isEmpty(): 
                     #self.canvas.itemconfig(rect, fill='white')
-                if objects.board.tiles[i][j].isLava():
+                elif objects.board.tiles[i][j].isLava():
                     rect = self.canvas.create_rectangle(xpos, ypos, xpos + tileSize, ypos + tileSize, fill='red')
                 elif objects.board.tiles[i][j].isWormhole():
                     self.canvas.pack(fill=BOTH, expand=1)
@@ -97,9 +97,10 @@ class Graphics:
                                                 anchor=CENTER, image=self.wormhole)
                     self.canvas.pack(fill=BOTH, expand=1)
                 elif objects.board.tiles[i][j].isWormholeExit():
-                    self.canvas.itemconfig(rect, fill='green')
+                    rect = self.canvas.create_rectangle(xpos, ypos, xpos + tileSize, ypos + tileSize, fill='green')
                 elif objects.board.tiles[i][j].isExit():
-                    self.canvas.itemconfig(rect, fill = "gold")
+                    rect = self.canvas.create_rectangle(xpos, ypos, xpos + tileSize, ypos + tileSize, fill='gold')
+
 
     def drawPlayer(self):
         tileSize = objects.board.size
@@ -153,14 +154,12 @@ class Graphics:
         self.root.mainloop()
 
     def redrawBoard(self):
+        # this function is called on by main when a game ends and the game must restart
         import main
 
-        self.root.after_cancel(self.job)
+        self.root.after_cancel(self.job)    # cancels the main game loop if it's runnin
         self.updateBoard()
         self.drawPlayer()
         self.drawKeys()
         self.job = self.root.after(100, main.main)
         self.root.mainloop()
-
-    def quit(self):
-        self.root.destroy()
