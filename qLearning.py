@@ -141,7 +141,8 @@ class QLearn:
 			return random.choice(self.getActionVector(self.currentState, objects.board))
 		
 		# if we don't RNG epsilon for exploration, then return the best action from our policy so far
-		return self.qTable[]
+		return
+		# return self.qTable[]
 
 	# def updateCurrentState(self, player, keys, wormholes):
 	# 	keyVector = list()
