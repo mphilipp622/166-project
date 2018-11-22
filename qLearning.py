@@ -5,7 +5,7 @@ import random
 
 class QLearn:
 
-	def __init__(self, startingState, rewardDiscount = 0.5, livingReward = -1, learningRate = 0.2, epsilon = 0.25):
+	def __init__(self, startingState, rewardDiscount = 0.5, livingReward = -1, learningRate = 0.2, epsilon = 0.9):
 		self.currentState = startingState
 		self.states = list()                # contains all the valid states of the model
 		# self.policyTable = dict()           # this will be a dictionary of ((State, action) : action) pairs.
@@ -15,6 +15,7 @@ class QLearn:
 		self.livingReward = livingReward
 		self.learningRate = learningRate
 		self.epsilon = epsilon
+		self.iterations = 0
 
 		self.policyTable = dict()			  # store policies using state as a key, which returns an action
 		self.qTable = dict()    # will store q values using (state, action) keys and a floating point value
@@ -56,11 +57,15 @@ class QLearn:
 			stateObj = state.State(newState[0], newState[1], None)
 			self.states.append(stateObj) # will change to state.State(state[0], state[1], state[2]) once wormholes are in.
 			
-			for action in self.getActionVector(stateObj, objects.board):
+			actionVector = self.getActionVector(stateObj, objects.board)
+			# assign a random action to the initial policy
+			self.policyTable[stateObj] = random.choice(actionVector)
+
+			for action in actionVector:
 				self.qTable[(stateObj, action)] = 0   # initialize state's value to 0 in the dictionary
 
 		self.qTable[(None, None)] = 0   # this will be used for the exit state
-
+		# self.policyTable[None] = "Exit"
 		# for key, val in self.currentStateValues.items():
 		#     print key
 		#     print val
@@ -126,33 +131,40 @@ class QLearn:
 	def initializeNextStateTable():
 		return
 
-	def updateState(self, rewardReceived):
+	def updateState(self, actionTaken, rewardReceived):
 		# will be called by player.aiQMove()
 		# Q_k+1(s, a) = (1 - learningRate)(Q_k(s, a)) + learningRate(R(s, a, s') + rewardDiscount(max_a'(Q_k(s', a'))))
-		newState = state.State((objects.player.x, objects.player.y), [(key.x, key.y) for key in objects.board.keys], None)
+		newState = state.State((objects.player.x, objects.player.y), [(key.x, key.y) if not(key.acquired) else None for key in objects.board.keys], None)
 		
+		rewardReceived += self.livingReward # apply living reward
+		# use the policy table to get the largest action' for the new state. Policy table should always be up-to-date with highest action values
+		sample = rewardReceived + (self.rewardDiscount * self.qTable[(newState, self.policyTable[newState])])
+		newValue = (
+			(1 - self.learningRate) * self.qTable[(self.currentState, actionTaken)] + 
+			(self.learningRate * sample)
+		)
+		
+		self.qTable[(self.currentState, actionTaken)] = newValue
+		
+		# get best action from the q values and update policy
+		actionVector = self.getActionVector(self.currentState, objects.board)
+		temporaryQValues = dict()
+		for action in actionVector:
+			temporaryQValues[action] = self.qTable[(self.currentState, action)]
+
+		maxActionValuePair = max(temporaryQValues, key=temporaryQValues.get) 
+
+		self.policyTable[self.currentState] = maxActionValuePair	# assign the best action to take from the current state.
 		self.currentState = newState
-		return
 
 	def getCurrentStateActionFromPolicy(self):
 
-		if random.random() <= self.epsilon:
+		# epsilon decays exponentially. So earlier runs are very random and increasingly lower
+		if random.random() <= self.epsilon**self.iterations or self.currentState not in self.policyTable:
 			# handle exploration by randomizing our action we take if we RNG epsilon
+			# also handles a case where we haven't yet figured out a policy for the current state
 			return random.choice(self.getActionVector(self.currentState, objects.board))
-		
+
 		# if we don't RNG epsilon for exploration, then return the best action from our policy so far
-		return
+		return self.policyTable[self.currentState]
 		# return self.qTable[]
-
-	# def updateCurrentState(self, player, keys, wormholes):
-	# 	keyVector = list()
-		
-	# 	for key in keys:
-	# 		# check if the key has been acquired. If it has, we want to append None so the state can keep track properly
-	# 		if key.acquired:
-	# 			keyVector.append(None)
-	# 		else:
-	# 			keyVector.append((key.x, key.y))
-
-	# 	newState = state.State((player.x, player.y), keyVector, wormholes)
-	# 	self.currentState = newState

@@ -22,6 +22,7 @@ def restart():
 	objects.graphics.root.after_cancel(currentJob)
 	objects.restart()
 	objects.graphics.redrawBoard()
+	
 
 def moveKeys():
 	for key in objects.board.keys:
@@ -46,7 +47,7 @@ def main():
 	if objects.valueIteration is True:
 		objects.mdp.updateCurrentState(objects.player, objects.board.keys, None)
 
-	currentJob = objects.graphics.root.after(1000, main) # pause for 10 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
+	currentJob = objects.graphics.root.after(100, main) # pause for 10 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
 
 if __name__ == '__main__':
 	start()

@@ -35,6 +35,8 @@ class Player:
 		
 		boardSize = board.size  # grab the board size of the current board
 		totalReward = 0
+		hasDied = False
+		resultingKeyPositionList = copy.deepcopy(board.keys)
 
 		# set the direction vector for the player movement based on the newDirection variable
 		xDirection = 0
@@ -64,34 +66,34 @@ class Player:
 			not (board.tiles[self.x][self.y + yDirection].isWall())):
 				self.y += yDirection
 
-				graphics.moveCanvas(0, boardSize * yDirection)
+				if hasDied is False:
+					graphics.moveCanvas(0, boardSize * yDirection)
 
 				if board.tiles[self.x][self.y].hasKey():
 					self.keyCount += 1
 					board.removeKey(self.x, self.y)
 					totalReward += 10
+
 				if board.tiles[self.x][self.y].isLava():
-					print("Player Died")
+					hasDied = True
 					totalReward -= 1000
-					objects.qLearn.updateState(totalReward)
-					time.sleep(0.1)
-					main.restart()
 				
 		elif xDirection != 0:
 			while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and 
 			not (board.tiles[self.x + xDirection][self.y].isWall())):
 				self.x += xDirection
 
-				graphics.moveCanvas(boardSize * xDirection, 0)
+				if hasDied is False:
+					graphics.moveCanvas(boardSize * xDirection, 0)
 
 				if board.tiles[self.x][self.y].hasKey():
 					self.keyCount += 1
 					board.removeKey(self.x, self.y)
+					totalReward += 10
+
 				if board.tiles[self.x][self.y].isLava():
-					print("Player Died")
-					objects.qLearn.updateState(totalReward)
-					time.sleep(0.1)
-					main.restart()
+					hasDied = True
+					totalReward -= 1000
 
 		objects.board.tiles[self.x][self.y].player = True
 		#x and y positions after movement
@@ -103,11 +105,19 @@ class Player:
 
 		if board.tiles[self.x][self.y].isExit() and self.keyCount >= board.exitKeysRequired:
 			print("Player Wins")
-			objects.qLearn.updateState(totalReward)
+			totalReward += 100
+			objects.qLearn.updateState(action, totalReward)
 			time.sleep(0.1)
 			main.restart()
+			return
 		
-		objects.qLearn.updateState(totalReward)
+		if hasDied is True:
+			print("Player Died")
+			objects.qLearn.updateState(action, totalReward)
+			time.sleep(0.1)
+			main.restart()
+		else:
+			objects.qLearn.updateState(action, totalReward)
 
 	def aiMove(self, action, board, graphics):
 		# This function will be run in main.py main() function in the game loop.

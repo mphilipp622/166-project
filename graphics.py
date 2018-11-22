@@ -150,7 +150,7 @@ class Graphics:
         self.updateBoard()
         self.drawPlayer()
         self.drawKeys()
-        self.job = self.root.after(10, main.main) # after() allows us to say "after 10 ms, run main()". This allows us to make a game loop inside main.py
+        self.job = self.root.after(100, main.main) # after() allows us to say "after 10 ms, run main()". This allows us to make a game loop inside main.py
         self.root.mainloop()
 
     def redrawBoard(self):
