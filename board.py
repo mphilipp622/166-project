@@ -85,6 +85,8 @@ class Board:
         
         # find the key that was acquired and set it to acquired
         for key in self.keys:
+            if key.acquired == True:
+                continue    # skip this key if it's been acquired. This will deal with accessing invalid dictionary keys
             if key.x == xPos and key.y == yPos:
                 key.acquired = True
                 objects.graphics.removeKey(key)

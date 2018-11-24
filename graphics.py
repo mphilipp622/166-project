@@ -28,7 +28,7 @@ class Graphics:
 
         self.canvas.pack()
 
-        self.keys = dict()
+        self.keys = dict()      # stores keys of type key.id, which is integer, and returns a canvas opal object.
 
         # self.initializeGraphics()
         # self.keys = dict()
