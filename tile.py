@@ -1,11 +1,12 @@
 # import portal
 
 class Tile:
-    
-    def __init__(self, tileType):    
+
+    def __init__(self, tileType):
         # portalExit defaults to nothing unless specified during instantiation.
         self.type = tileType
         self.key = False
+        self.player = False
 
     # tileType should be one of the following:
     # "wall"
@@ -14,7 +15,7 @@ class Tile:
     # "exit"
     # "portalEntrance"
     # "portalExit"
-    
+
     def isWall(self):
         return self.type == "wall"
 
@@ -35,7 +36,13 @@ class Tile:
 
     def hasKey(self):
         return self.key
+    
+    def hasPlayer(self):
+        return self.player
 
     def isNotValidKeyTile(self):
         # This function returns true if a key can NOT go onto this tile
-        return (self.type == "wormhole" or self.type == "lava" or self.type == "wall" or self.type == "wormholeExit")
+        if self.type == "wormhole" or self.type == "wall" or self.hasKey() or self.hasPlayer():
+            return True
+
+        return False 
