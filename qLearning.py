@@ -5,14 +5,15 @@ import random
 
 class QLearn:
 
-	def __init__(self, startingState, rewardDiscount = 0.5, livingReward = -1, learningRate = 0.2, epsilon = 0.9):
+	def __init__(self, startingState):
 		self.currentState = startingState
 		self.states = list()                	# contains all the valid states of the model
-		self.rewardDiscount = rewardDiscount
-		self.livingReward = livingReward
-		self.learningRate = learningRate
-		self.epsilon = epsilon
+		self.rewardDiscount = 0.5
+		self.livingReward = -1
+		self.learningRate = 0.2
+		self.epsilon = 0.9
 		self.iterations = 0
+		self.numberOfWins = 0
 
 		self.policyTable = dict()			  	# store policies using state as a key, which returns an action
 		self.qTable = dict()    				# will store q values using (state, action) keys and a floating point value
@@ -164,3 +165,6 @@ class QLearn:
 		# if we don't RNG epsilon for exploration, then return the best action from our policy so far
 		return self.policyTable[self.currentState]
 		# return self.qTable[]
+
+	def getWinRate(self):
+		return 100 * float(self.numberOfWins / self.iterations)

@@ -4,6 +4,7 @@ import random
 import state
 import mdp
 import getopt
+import time
 
 # player, board, and graphics are instantiated in objects.py file.
 
@@ -19,10 +20,10 @@ def restart():
 	# objects.graphics.quit()
 	# objects.graphics.root.after_cancel()
 	global currentJob
+
 	objects.graphics.root.after_cancel(currentJob)
 	objects.restart()
 	objects.graphics.redrawBoard()
-	
 
 def moveKeys():
 	for key in objects.board.keys:
@@ -31,11 +32,6 @@ def moveKeys():
 def main():
 	global currentJob
 	# Main Game Loop. Enemy movement, wormhole movement, player movement all go here
-
-	# objects.player.move(None, random.choice(["Up", "Down", "Left", "Right"])) # Testing random player movement
-
-	# if qlearning
-	#   objects.player.aiMove(objects.qLearn.getCurrentStateActionFromPolicy(), objects.board, objects.graphics)
 
 	if objects.valueIteration is True:
 		objects.player.aiMove(objects.mdp.getCurrentStateActionFromPolicy(), objects.board, objects.graphics)
@@ -47,7 +43,7 @@ def main():
 	if objects.valueIteration is True:
 		objects.mdp.updateCurrentState(objects.player, objects.board.keys, None)
 
-	currentJob = objects.graphics.root.after(100, main) # pause for 10 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
+	currentJob = objects.graphics.root.after(150, main) # pause for 150 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
 
 if __name__ == '__main__':
 	start()

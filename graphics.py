@@ -47,7 +47,7 @@ class Graphics:
         # renders line behind player after movement
         line = self.canvas.create_line(x0, y0, x1, x2, width = 3, fill='red')
         self.root.update()
-        time.sleep(.2)
+        time.sleep(.1)
         self.canvas.delete(line)
 
     def moveCanvas(self, xAmount, yAmount):
@@ -55,6 +55,8 @@ class Graphics:
         self.canvas.move(self.playerGraphic, xAmount, yAmount)
 
     def moveKey(self, key, xAmount, yAmount):
+        if key not in self.keys:
+            return
         self.canvas.move(self.keys[key], xAmount, yAmount)
 
     def removeKey(self, key):
@@ -150,16 +152,23 @@ class Graphics:
         self.updateBoard()
         self.drawPlayer()
         self.drawKeys()
-        self.job = self.root.after(100, main.main) # after() allows us to say "after 10 ms, run main()". This allows us to make a game loop inside main.py
+        self.job = self.root.after(1000, main.main) # after() allows us to say "after 10 ms, run main()". This allows us to make a game loop inside main.py
         self.root.mainloop()
 
     def redrawBoard(self):
         # this function is called on by main when a game ends and the game must restart
         import main
-
-        self.root.after_cancel(self.job)    # cancels the main game loop if it's runnin
+    
+        # self.root.after_cancel(self.job)    # cancels the main game loop if it's runnin
         self.updateBoard()
         self.drawPlayer()
         self.drawKeys()
-        self.job = self.root.after(100, main.main)
-        self.root.mainloop()
+        # self.job = self.root.after(500, main.main)
+
+    # def quit(self):
+    #     self.root.destroy()
+    #     self.root = Tk()                     #This creates a window, but it won't show up
+    #     self.root.wm_title("CSCI 166 Project       by: Joshua Holland") #Makes the title that will appear in the top left
+    #     self.root.geometry("%dx%d+%d+%d" % (objects.board.width * objects.board.size, objects.board.height * objects.board.size, 130, 100))
+    #     self.canvas = Canvas(self.root, width = objects.board.width * objects.board.size, height= objects.board.height * objects.board.size)
+    #     self.canvas.pack()

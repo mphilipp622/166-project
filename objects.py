@@ -73,7 +73,8 @@ def restart():
 	if valueIteration is True:
 		mdp.currentState = state.State((player.x, player.y), [(key.x, key.y) for key in board.keys], None)
 	else:
-		qLearn.iterations += 1
+		qLearn.iterations += 1.0
 		qLearn.currentState = state.State((player.x, player.y), [(key.x, key.y) for key in board.keys], None)
 		print("Iterations: " + str(qLearn.iterations))
+		print("Win Rate = " + str(round(qLearn.getWinRate(), 2)) + "%")
 	# graphics = graphicsLibrary.Graphics()

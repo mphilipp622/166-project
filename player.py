@@ -107,6 +107,7 @@ class Player:
 			print("Player Wins")
 			totalReward += 100
 			objects.qLearn.updateState(action, totalReward)
+			objects.qLearn.numberOfWins += 1.0
 			time.sleep(0.1)
 			main.restart()
 			return
@@ -234,6 +235,3 @@ class Player:
 
 		# render the line behind player
 		objects.graphics.drawLine(x0, y0, x1, x2)
-
-
-	

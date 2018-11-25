@@ -18,7 +18,7 @@ class State:
 
     def __hash__(self):
         # return hash((self.playerPos, self.keyPositions, self.wormholes))
-        return hash(repr(self))
+        return hash((str(self.playerPos), str(self.keyPositions)))
 
     def __repr__(self):
         return "[ p" + str(self.playerPos) + ", K(" + str(self.keyPositions) + ")]"
