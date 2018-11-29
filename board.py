@@ -7,9 +7,9 @@ import objects
 import state
 
 class Board:
-    
+
     def __init__(self, filename):
-        
+
         # open the json file and store it into levelData
         try:
             with open(filename) as f:
@@ -29,7 +29,7 @@ class Board:
         self.makeBoard()
 
     def makeBoard(self):
-        
+
         # board should be [x][y]
         self.tiles = [[tile.Tile("empty") for y in range(self.height)] for x in range(self.width)]
 
@@ -63,7 +63,7 @@ class Board:
                 entranceDirection = wormhole["directionEntrance"]
                 exitDirection = wormhole["directionExit"]
 
-                self.tiles[exitX][exitY] = portalExit.PortalExit(exitDirection)
+                self.tiles[exitX][exitY] = portalExit.PortalExit(exitX, exitY, exitDirection)
                 self.tiles[entranceX][entranceY] = portal.Portal(entranceDirection, self.tiles[exitX][exitY])
                 self.wormholes.append(self.tiles[entranceX][entranceY])
 
@@ -82,7 +82,7 @@ class Board:
 
     def removeKey(self, xPos, yPos):
         self.tiles[xPos][yPos].key = False
-        
+
         # find the key that was acquired and set it to acquired
         for key in self.keys:
             if key.acquired == True:
