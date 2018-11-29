@@ -62,24 +62,5 @@
             "directionEntrance": "up",
             "directionExit" : "right"
         }
-    ],
-
-	"keys":
-	[
-		{
-			"startingPosition": [4,2],
-			"positionBoundsX" : [4,7],
-			"positionBoundsY" : [0,2]
-		},
-		{
-			"startingPosition": [2,3],
-			"positionBoundsX": [0,4],
-			"positionBoundsY": [0,3]
-		},
-		{
-			"startingPosition": [6,6],
-			"positionBoundsX": [4, 7],
-			"positionBoundsY": [2, 7]
-		}
-	]
+    ]
 }

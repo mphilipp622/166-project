@@ -26,7 +26,11 @@ class Portal(tile.Tile):
     def getPortalExit(self):
         return self.exit
 
-    def translateDirection(self, action, thePlayer):
+    def translateDirection(self, action):
+        if action == self.direction.capitalize():
+            # if player enters from the proper direction, then spit them out the direction the exit points to
+            return self.exit.direction.capitalize()
+
         eDirection = self.portalMechanics[self.direction][action]
         newAction = self.portalMechanics[self.exit.direction][eDirection]
-        thePlayer.overrideAction = newAction
+        return newAction

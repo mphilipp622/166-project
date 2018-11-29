@@ -51,7 +51,7 @@ class QLearn:
 		stateList = list(itertools.product(playerPos, keyList))
 		
 		for newState in stateList:
-			stateObj = state.State(newState[0], newState[1], None)
+			stateObj = state.State(newState[0], newState[1])
 			self.states.append(stateObj) # will change to state.State(state[0], state[1], state[2]) once wormholes are in.
 			
 			actionVector = self.getActionVector(stateObj, objects.board)
@@ -131,7 +131,7 @@ class QLearn:
 	def updateState(self, actionTaken, rewardReceived):
 		# will be called by player.aiQMove()
 		# Q_k+1(s, a) = (1 - learningRate)(Q_k(s, a)) + learningRate(R(s, a, s') + rewardDiscount(max_a'(Q_k(s', a'))))
-		newState = state.State((objects.player.x, objects.player.y), [(key.x, key.y) if not(key.acquired) else None for key in objects.board.keys], None)
+		newState = state.State((objects.player.x, objects.player.y), [(key.x, key.y) if not(key.acquired) else None for key in objects.board.keys])
 		
 		rewardReceived += self.livingReward # apply living reward
 		# use the policy table to get the largest action' for the new state. Policy table should always be up-to-date with highest action values

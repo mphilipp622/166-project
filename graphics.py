@@ -29,7 +29,7 @@ class Graphics:
         self.canvas.pack()
 
         self.keys = dict()      # stores keys of type key.id, which is integer, and returns a canvas opal object.
-
+        self.wormholes = list()
         # self.initializeGraphics()
         # self.keys = dict()
         # self.wormholes = dict()
@@ -53,12 +53,14 @@ class Graphics:
     def teleportPlayer(self, newX, newY):
         boardSize = objects.board.size
         playerSize = objects.player.size
-        x1 = newX * boardSize + (boardSize - playerSize) / 2
-        y1 = newY * boardSize + (boardSize - playerSize) / 2
-        x2 = newX * boardSize + boardSize - (boardSize - playerSize) / 2
-        y2 = newY * boardSize + boardSize - (boardSize - playerSize) / 2
-        #Removed X1,Y1 to get to function, messes up graphics as a result
-        self.canvas.coords(self.playerGraphic, x2, y2)
+        x1 = newX * boardSize + (boardSize/2)
+        y1 = newY * boardSize + (boardSize/2)
+        # x1 = newX * boardSize + (boardSize - playerSize) / 2
+        # y1 = newY * boardSize + (boardSize - playerSize) / 2
+        # x2 = newX * boardSize + boardSize - (boardSize - playerSize) / 2
+        # y2 = newY * boardSize + boardSize - (boardSize - playerSize) / 2
+													
+        self.canvas.coords(self.playerGraphic, x1, y1)
 
     def moveCanvas(self, xAmount, yAmount):
         # Called from player.move()
@@ -103,13 +105,27 @@ class Graphics:
                     elif objects.board.tiles[i][j].direction == "right":
                         img = Image.open("./assets/enterRight.png")
                     img = img.resize((60,60))
-                    self.wormhole = ImageTk.PhotoImage(img)
+                    self.wormholes.append(ImageTk.PhotoImage(img))
                     self.canvas.create_image(   xpos + (tileSize/2),
                                                 ypos + (tileSize/2),
-                                                anchor=CENTER, image=self.wormhole)
+                                                anchor=CENTER, image=self.wormholes[len(self.wormholes) - 1])
                     self.canvas.pack(fill=BOTH, expand=1)
                 elif objects.board.tiles[i][j].isWormholeExit():
-                    rect = self.canvas.create_rectangle(xpos, ypos, xpos + tileSize, ypos + tileSize, fill='green')
+                    self.canvas.pack(fill=BOTH, expand=1)
+                    if objects.board.tiles[i][j].direction == "up":
+                        img = Image.open("./assets/exitUp.png")
+                    elif objects.board.tiles[i][j].direction == "down":
+                        img = Image.open("./assets/exitDown.png")
+                    elif objects.board.tiles[i][j].direction == "left":
+                        img = Image.open("./assets/exitLeft.png")
+                    elif objects.board.tiles[i][j].direction == "right":
+                        img = Image.open("./assets/exitRight.png")
+                    img = img.resize((60,60))
+                    self.wormholes.append(ImageTk.PhotoImage(img))
+                    self.canvas.create_image(   xpos + (tileSize/2),
+                                                ypos + (tileSize/2),
+                                                anchor=CENTER, image=self.wormholes[len(self.wormholes) - 1])
+                    self.canvas.pack(fill=BOTH, expand=1)
                 elif objects.board.tiles[i][j].isExit():
                     rect = self.canvas.create_rectangle(xpos, ypos, xpos + tileSize, ypos + tileSize, fill='gold')
 

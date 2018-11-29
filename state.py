@@ -1,11 +1,9 @@
 
 class State:
 
-    def __init__(self, playerPos, keyPos, wormholePos):
+    def __init__(self, playerPos, keyPos):
         self.playerPos = playerPos
-        # self.wormholes = [wormhole for wormhole in wormholePos]
         self.keyPositions = keyPos
-        # self.currentValue = 0   # used for value iteration. Values are always initialized to 0 at time 0
 
     def __eq__(self, other):
         # overload this class's equality operator so it checks if all the positions are the same.
@@ -14,10 +12,8 @@ class State:
                 self.playerPos == other.playerPos 
                 and ( self.keyPositions == other.keyPositions )
         )
-                # and ( set(self.wormholes) == set(other.wormholes) ))
 
     def __hash__(self):
-        # return hash((self.playerPos, self.keyPositions, self.wormholes))
         return hash((str(self.playerPos), str(self.keyPositions)))
 
     def __repr__(self):
