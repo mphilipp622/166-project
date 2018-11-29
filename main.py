@@ -43,7 +43,7 @@ def main():
 	if objects.valueIteration is True:
 		objects.mdp.updateCurrentState(objects.player, objects.board.keys, None)
 
-	currentJob = objects.graphics.root.after(150, main) # pause for 150 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
+	currentJob = objects.graphics.root.after(10, main) # pause for 150 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
 
 if __name__ == '__main__':
 	start()
