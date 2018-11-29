@@ -57,8 +57,8 @@ class Graphics:
         y1 = newY * boardSize + (boardSize - playerSize) / 2
         x2 = newX * boardSize + boardSize - (boardSize - playerSize) / 2
         y2 = newY * boardSize + boardSize - (boardSize - playerSize) / 2
-
-        self.canvas.coords(self.playerGraphic, x1, y1, x2, y2)
+        #Removed X1,Y1 to get to function, messes up graphics as a result
+        self.canvas.coords(self.playerGraphic, x2, y2)
 
     def moveCanvas(self, xAmount, yAmount):
         # Called from player.move()

@@ -27,6 +27,6 @@ class Portal(tile.Tile):
         return self.exit
 
     def translateDirection(self, action, thePlayer):
-        eDirection = portalMechanics[self.direction][action]
-        newAction = portalMechanics[self.exit.direction][eDirection]
+        eDirection = self.portalMechanics[self.direction][action]
+        newAction = self.portalMechanics[self.exit.direction][eDirection]
         thePlayer.overrideAction = newAction

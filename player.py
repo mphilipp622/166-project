@@ -43,9 +43,9 @@ class Player:
 		xDirection = 0
 		yDirection = 0
 
-		if overrideAction != None:
-			action = overrideAction
-			overrideAction = None
+		if self.overrideAction != None:
+			action = self.overrideAction
+			self.overrideAction = None
 
 		# note that the x, y origin is at the top-left, which is why UP is -1 in the y direction.
 		if action == "Down":
@@ -76,6 +76,7 @@ class Player:
 					self.x = wormhole.exit.exitX
 					self.y = wormhole.exit.exitY
 					objects.graphics.teleportPlayer(self.x, self.y)
+					wormhole.translateDirection(action, self)
 
 				if hasDied is False:
 					graphics.moveCanvas(0, boardSize * yDirection)
@@ -99,6 +100,7 @@ class Player:
 					self.x = wormhole.exit.exitX
 					self.y = wormhole.exit.exitY
 					objects.graphics.teleportPlayer(self.x, self.y)
+					wormhole.translateDirection(action, self)
 
 				if hasDied is False:
 					graphics.moveCanvas(boardSize * xDirection, 0)
@@ -148,6 +150,10 @@ class Player:
 		xDirection = 0
 		yDirection = 0
 
+		if self.overrideAction != None:
+			action = self.overrideAction
+			self.overrideAction = None
+
 		# note that the x, y origin is at the top-left, which is why UP is -1 in the y direction.
 		if action == "Down":
 			yDirection = 1
@@ -171,10 +177,11 @@ class Player:
 				self.y += yDirection
 
 				if board.tiles[self.x][self.y].isWormhole():
-					wormhole = objects.board.wormholes[(self.x, self.y)]
+					wormhole = board.tiles[self.x][self.y]
 					self.x = wormhole.exit.exitX
 					self.y = wormhole.exit.exitY
 					objects.graphics.teleportPlayer(self.x, self.y)
+					wormhole.translateDirection(action, self)
 
 				if board.tiles[self.x][self.y].hasKey():
 					self.keyCount += 1
@@ -192,10 +199,11 @@ class Player:
 				self.x += xDirection
 
 				if board.tiles[self.x][self.y].isWormhole():
-					wormhole = objects.board.wormholes[(self.x, self.y)]
+					wormhole = board.tiles[self.x][self.y]
 					self.x = wormhole.exit.exitX
 					self.y = wormhole.exit.exitY
 					objects.graphics.teleportPlayer(self.x, self.y)
+					wormhole.translateDirection(action, self)
 
 				if board.tiles[self.x][self.y].hasKey():
 					self.keyCount += 1
