@@ -154,7 +154,7 @@ class Player:
 				self.y += yDirection
 
 				if board.tiles[self.x][self.y].isWormhole():
-                	wormhole = objects.board.wormholes[(self.x, self.y)]
+					wormhole = objects.board.wormholes[(self.x, self.y)]
 					self.x = wormhole.exit.exitX
 					self.y = wormhole.exit.exitY
 					objects.graphics.teleportPlayer(self.x, self.y)
