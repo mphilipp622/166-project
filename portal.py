@@ -9,6 +9,7 @@ class Portal(tile.Tile):
         self.exit = newExit
         self.type = "wormhole"
         self.key = False
+        self.portalMechanics = {}
         self.portalMechanics["up"] = {
             "Up" : "Up", "Right" : "Right", "Down" : "Down", "Left" : "Left"
         }

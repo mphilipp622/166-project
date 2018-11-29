@@ -11,6 +11,7 @@ class Player:
 		self.y = newY   # y position of player
 		self.size = int(objects.board.size / 1.75)
 		self.keyCount = 0
+		self.overrideAction = None
 
 	def getActionVector(self, board):
 	    # helper function called by aiMove() to get a vector of valid directions from the player's current position.
@@ -42,6 +43,10 @@ class Player:
 		xDirection = 0
 		yDirection = 0
 
+		if overrideAction != None:
+			action = overrideAction
+			overrideAction = None
+
 		# note that the x, y origin is at the top-left, which is why UP is -1 in the y direction.
 		if action == "Down":
 			yDirection = 1
@@ -67,7 +72,7 @@ class Player:
 				self.y += yDirection
 
 				if board.tiles[self.x][self.y].isWormhole():
-					wormhole = board.tiles[(self.x, self.y)]
+					wormhole = board.tiles[self.x][self.y]
 					self.x = wormhole.exit.exitX
 					self.y = wormhole.exit.exitY
 					objects.graphics.teleportPlayer(self.x, self.y)
@@ -84,13 +89,13 @@ class Player:
 					hasDied = True
 					totalReward -= 1000
 
-		elif xDirection != 0: 	 
+		elif xDirection != 0:
 			while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and
 			not (board.tiles[self.x + xDirection][self.y].isWall())):
 				self.x += xDirection
 
 				if board.tiles[self.x][self.y].isWormhole():
-					wormhole = board.tiles[(self.x, self.y)]
+					wormhole = board.tiles[self.x][self.y]
 					self.x = wormhole.exit.exitX
 					self.y = wormhole.exit.exitY
 					objects.graphics.teleportPlayer(self.x, self.y)
