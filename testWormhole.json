@@ -1,24 +1,17 @@
 {
-	"height" : 6,
+	"height" : 5,
 	
-	"width" : 6,
+	"width" : 5,
 	
 	"tileSize" : 60,
 	
-	"player" : [3, 3],
+	"player" : [3, 1],
 	
 	"exit" : 
 	{
-		"position" : [0, 5], 
+		"position" : [1, 3], 
 		"keys" : 0
     },
-
-    "deathTiles":
-    [
-        {
-			"position" : [0, 2]
-		}
-    ],
     
     "walls":
     [
@@ -26,29 +19,29 @@
 			"position" : [0, 0]
         },
         {
-			"position" : [0, 4]
+			"position" : [0, 3]
         },
         {
-			"position" : [1, 4]
+			"position" : [3, 0]
         },
         {
-			"position" : [2, 4]
+			"position" : [3, 3]
         },
         {
-			"position" : [3, 4]
+            "position" : [0, 4]
         },
         {
-			"position" : [5, 1]
-		}
+            "position" : [4, 1]
+        }
     ],
 
 	"wormholes": 
 	[
 		{
-			"positionEntrance": [3, 1],
-			"positionExit": [5, 5],
-			"directionEntrance": "down",
-			"directionExit" : "left"
+			"positionEntrance": [1, 1],
+			"positionExit": [2, 2],
+			"directionEntrance": "left",
+			"directionExit" : "right"
         }
     ]
 }

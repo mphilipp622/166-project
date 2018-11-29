@@ -35,10 +35,10 @@ def main():
 	# Main Game Loop. Enemy movement, wormhole movement, player movement all go here
 
 	# objects.player.move()
-	if objects.valueIteration is True:
-		objects.player.aiMove(objects.mdp.getCurrentStateActionFromPolicy(), objects.board, objects.graphics)
-	elif objects.valueIteration is False:
-		objects.player.aiQMove(objects.qLearn.getCurrentStateActionFromPolicy(), objects.board, objects.graphics)
+	# if objects.valueIteration is True:
+	# 	objects.player.aiMove(objects.mdp.getCurrentStateActionFromPolicy(), objects.board, objects.graphics)
+	# elif objects.valueIteration is False:
+	# 	objects.player.aiQMove(objects.qLearn.getCurrentStateActionFromPolicy(), objects.board, objects.graphics)
 	
 	moveKeys()
 
