@@ -153,11 +153,11 @@ class Player:
 			not (board.tiles[self.x][self.y + yDirection].isWall())):
 				self.y += yDirection
 
-				  if board.tiles[self.x][self.y].isWormhole():
-                    wormhole = objects.board.wormholes[(self.x + xDirection, self.y)]
-                    self.x = wormhole.exit.exitX
-                    self.y = wormhole.exit.exitY
-                    objects.graphics.teleportPlayer(self.x, self.y)
+				if board.tiles[self.x][self.y].isWormhole():
+                	wormhole = objects.board.wormholes[(self.x, self.y)]
+					self.x = wormhole.exit.exitX
+					self.y = wormhole.exit.exitY
+					objects.graphics.teleportPlayer(self.x, self.y)
 
 				if board.tiles[self.x][self.y].hasKey():
 					self.keyCount += 1
@@ -174,11 +174,11 @@ class Player:
 			not (board.tiles[self.x + xDirection][self.y].isWall())):
 				self.x += xDirection
 
-				 if board.tiles[self.x][self.y].isWormhole():
-                    wormhole = objects.board.wormholes[(self.x + xDirection, self.y)]
-                    self.x = wormhole.exit.exitX
-                    self.y = wormhole.exit.exitY
-                    objects.graphics.teleportPlayer(self.x, self.y)
+				if board.tiles[self.x][self.y].isWormhole():
+					wormhole = objects.board.wormholes[(self.x, self.y)]
+					self.x = wormhole.exit.exitX
+					self.y = wormhole.exit.exitY
+					objects.graphics.teleportPlayer(self.x, self.y)
 
 				if board.tiles[self.x][self.y].hasKey():
 					self.keyCount += 1
