@@ -5,7 +5,7 @@ import main
 import copy
 
 class Player:
-		
+
 	def __init__(self, newX, newY):
 		self.x = newX   # x position of player
 		self.y = newY   # y position of player
@@ -32,7 +32,7 @@ class Player:
 
 	def aiQMove(self, action, board, graphics):
 		# will perform movement and track rewards as it moves. Will then tell the qLearn object what reward it got
-		
+
 		boardSize = board.size  # grab the board size of the current board
 		totalReward = 0
 		hasDied = False
@@ -59,10 +59,10 @@ class Player:
 		objects.board.tiles[self.x][self.y].player = False
 		resultingKeyPositionList = copy.deepcopy(objects.qLearn.currentState.keyPositions) # this list will be updated if keys are acquired taking this action
 
-		# handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving. 
+		# handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving.
 		# Otherwise, keep moving and update graphics.
 		if yDirection != 0:
-			while ((self.y + yDirection >= 0 and self.y + yDirection < board.height) and 
+			while ((self.y + yDirection >= 0 and self.y + yDirection < board.height) and
 			not (board.tiles[self.x][self.y + yDirection].isWall())):
 				self.y += yDirection
 
@@ -77,9 +77,9 @@ class Player:
 				if board.tiles[self.x][self.y].isLava():
 					hasDied = True
 					totalReward -= 1000
-				
+
 		elif xDirection != 0:
-			while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and 
+			while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and
 			not (board.tiles[self.x + xDirection][self.y].isWall())):
 				self.x += xDirection
 
@@ -111,7 +111,7 @@ class Player:
 			time.sleep(0.1)
 			main.restart()
 			return
-		
+
 		if hasDied is True:
 			print("Player Died")
 			objects.qLearn.updateState(action, totalReward)
@@ -122,7 +122,7 @@ class Player:
 
 	def aiMove(self, action, board, graphics):
 		# This function will be run in main.py main() function in the game loop.
-		# board and graphics are the same as objects.board and objects.graphics. 
+		# board and graphics are the same as objects.board and objects.graphics.
 		# They're being passed to this function from main.py main() function
 
 		boardSize = board.size  # grab the board size of the current board
@@ -146,12 +146,18 @@ class Player:
 		y0 = self.y * boardSize + boardSize / 2
 
 		objects.board.tiles[self.x][self.y].player = False
-		# handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving. 
+		# handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving.
 		# Otherwise, keep moving and update graphics.
 		if yDirection != 0:
-			while ((self.y + yDirection >= 0 and self.y + yDirection < board.height) and 
+			while ((self.y + yDirection >= 0 and self.y + yDirection < board.height) and
 			not (board.tiles[self.x][self.y + yDirection].isWall())):
 				self.y += yDirection
+
+				  if board.tiles[self.x][self.y].isWormhole():
+                    wormhole = objects.board.wormholes[(self.x + xDirection, self.y)]
+                    self.x = wormhole.exit.exitX
+                    self.y = wormhole.exit.exitY
+                    objects.graphics.teleportPlayer(self.x, self.y)
 
 				if board.tiles[self.x][self.y].hasKey():
 					self.keyCount += 1
@@ -162,11 +168,17 @@ class Player:
 					main.restart()
 
 				graphics.moveCanvas(0, boardSize * yDirection)
-				
+
 		elif xDirection != 0:
-			while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and 
+			while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and
 			not (board.tiles[self.x + xDirection][self.y].isWall())):
 				self.x += xDirection
+
+				 if board.tiles[self.x][self.y].isWormhole():
+                    wormhole = objects.board.wormholes[(self.x + xDirection, self.y)]
+                    self.x = wormhole.exit.exitX
+                    self.y = wormhole.exit.exitY
+                    objects.graphics.teleportPlayer(self.x, self.y)
 
 				if board.tiles[self.x][self.y].hasKey():
 					self.keyCount += 1
@@ -175,7 +187,7 @@ class Player:
 					print("Player Died")
 					time.sleep(0.1)
 					main.restart()
-					
+
 				graphics.moveCanvas(boardSize * xDirection, 0)
 
 		objects.board.tiles[self.x][self.y].player = True
@@ -215,16 +227,16 @@ class Player:
 		x0 = self.x * boardSize + boardSize / 2
 		y0 = self.y * boardSize + boardSize / 2
 
-		# handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving. 
+		# handle movement bounds checking. If player hits a wall or ends up on a perimeter tile, stop moving.
 		# Otherwise, keep moving and update graphics.
 		if yDirection != 0:
-			while ((self.y + yDirection >= 0 and self.y + yDirection < objects.board.height) and 
+			while ((self.y + yDirection >= 0 and self.y + yDirection < objects.board.height) and
 			not (objects.board.tiles[self.x][self.y + yDirection].isWall())):
 				self.y += yDirection
 				objects.graphics.moveCanvas(0, boardSize * yDirection)
-				
+
 		elif xDirection != 0:
-			while ((self.x + xDirection >= 0 and self.x + xDirection < objects.board.width) and 
+			while ((self.x + xDirection >= 0 and self.x + xDirection < objects.board.width) and
 			not (objects.board.tiles[self.x + xDirection][self.y].isWall())):
 				self.x += xDirection
 				objects.graphics.moveCanvas(boardSize * xDirection, 0)
