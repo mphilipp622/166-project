@@ -50,6 +50,16 @@ class Graphics:
         time.sleep(.1)
         self.canvas.delete(line)
 
+    def teleportPlayer(self, newX, newY):
+        boardSize = objects.board.size
+        playerSize = objects.player.size
+        x1 = newX * boardSize + (boardSize - playerSize) / 2
+        y1 = newY * boardSize + (boardSize - playerSize) / 2
+        x2 = newX * boardSize + boardSize - (boardSize - playerSize) / 2
+        y2 = newY * boardSize + boardSize - (boardSize - playerSize) / 2
+
+        self.canvas.coords(self.playerGraphic, x1, y1, x2, y2)
+
     def moveCanvas(self, xAmount, yAmount):
         # Called from player.move()
         self.canvas.move(self.playerGraphic, xAmount, yAmount)
@@ -78,7 +88,7 @@ class Graphics:
 
                 if objects.board.tiles[i][j].isWall():
                     rect = self.canvas.create_rectangle(xpos, ypos, xpos + tileSize, ypos + tileSize, fill='black')
-                #elif objects.board.tiles[i][j].isEmpty(): 
+                #elif objects.board.tiles[i][j].isEmpty():
                     #self.canvas.itemconfig(rect, fill='white')
                 elif objects.board.tiles[i][j].isLava():
                     rect = self.canvas.create_rectangle(xpos, ypos, xpos + tileSize, ypos + tileSize, fill='red')
@@ -107,7 +117,7 @@ class Graphics:
     def drawPlayer(self):
         tileSize = objects.board.size
         playerSize = objects.player.size
-        
+
         if self.playerGraphic:
             del self.playerGraphic
 
@@ -123,13 +133,13 @@ class Graphics:
 
         """
         self.playerGraphic = self.canvas.create_oval(objects.player.x *boardSize + (boardSize - playerSize) / 2,
-													objects.player.y*boardSize + (boardSize - playerSize) / 2, 
-													objects.player.x*boardSize + boardSize - (boardSize - playerSize) / 2, 
-													objects.player.y*boardSize + boardSize - (boardSize - playerSize) / 2, 
+													objects.player.y*boardSize + (boardSize - playerSize) / 2,
+													objects.player.x*boardSize + boardSize - (boardSize - playerSize) / 2,
+													objects.player.y*boardSize + boardSize - (boardSize - playerSize) / 2,
 													fill='red')
         """
-    
-    
+
+
     def drawKeys(self):
         boardSize = objects.board.size
         playerSize = objects.player.size
@@ -138,9 +148,9 @@ class Graphics:
 
         for key in objects.board.keys:
             self.keys[key] = self.canvas.create_oval(key.x *boardSize + (boardSize - playerSize) / 2,
-													key.y*boardSize + (boardSize - playerSize) / 2, 
-													key.x*boardSize + boardSize - (boardSize - playerSize) / 2, 
-													key.y*boardSize + boardSize - (boardSize - playerSize) / 2, 
+													key.y*boardSize + (boardSize - playerSize) / 2,
+													key.x*boardSize + boardSize - (boardSize - playerSize) / 2,
+													key.y*boardSize + boardSize - (boardSize - playerSize) / 2,
 													fill='yellow')
 
     def initializeGraphics(self):
@@ -158,7 +168,7 @@ class Graphics:
     def redrawBoard(self):
         # this function is called on by main when a game ends and the game must restart
         import main
-    
+
         # self.root.after_cancel(self.job)    # cancels the main game loop if it's runnin
         self.updateBoard()
         self.drawPlayer()

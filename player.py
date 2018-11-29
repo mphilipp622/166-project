@@ -66,6 +66,12 @@ class Player:
 			not (board.tiles[self.x][self.y + yDirection].isWall())):
 				self.y += yDirection
 
+				if board.tiles[self.x][self.y].isWormhole():
+					wormhole = board.tiles[(self.x, self.y)]
+					self.x = wormhole.exit.exitX
+					self.y = wormhole.exit.exitY
+					objects.graphics.teleportPlayer(self.x, self.y)
+
 				if hasDied is False:
 					graphics.moveCanvas(0, boardSize * yDirection)
 
@@ -78,10 +84,16 @@ class Player:
 					hasDied = True
 					totalReward -= 1000
 
-		elif xDirection != 0:
+		elif xDirection != 0: 	 
 			while ((self.x + xDirection >= 0 and self.x + xDirection < board.width) and
 			not (board.tiles[self.x + xDirection][self.y].isWall())):
 				self.x += xDirection
+
+				if board.tiles[self.x][self.y].isWormhole():
+					wormhole = board.tiles[(self.x, self.y)]
+					self.x = wormhole.exit.exitX
+					self.y = wormhole.exit.exitY
+					objects.graphics.teleportPlayer(self.x, self.y)
 
 				if hasDied is False:
 					graphics.moveCanvas(boardSize * xDirection, 0)
