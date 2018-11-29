@@ -5,7 +5,6 @@ import sys
 import state
 import mdp as mdpLibrary
 import qLearning as qLearningLibrary
-import stateHandler
 
 # This file is used by main, player, and board for accessing instances of these classes for cross communication
 
