@@ -82,8 +82,9 @@ class Player:
 				graphics.drawLine(x0, y0, x1, x2)
 				self.x = wormhole.exit.exitX
 				self.y = wormhole.exit.exitY
-				xDirection = self.getXDirection(wormhole.translateDirection(action))
-				yDirection = self.getYDirection(wormhole.translateDirection(action))
+				action = wormhole.translateDirection(action)
+				xDirection = self.getXDirection(action)
+				yDirection = self.getYDirection(action)
 				objects.graphics.teleportPlayer(self.x, self.y)
 				x0 = self.x * boardSize + boardSize / 2
 				y0 = self.y * boardSize + boardSize / 2
@@ -162,8 +163,9 @@ class Player:
 				graphics.drawLine(x0, y0, x1, x2)
 				self.x = wormhole.exit.exitX
 				self.y = wormhole.exit.exitY
-				xDirection = self.getXDirection(wormhole.translateDirection(action))
-				yDirection = self.getYDirection(wormhole.translateDirection(action))
+				action = wormhole.translateDirection(action)
+				xDirection = self.getXDirection(action)
+				yDirection = self.getYDirection(action)
 				objects.graphics.teleportPlayer(self.x, self.y)
 				x0 = self.x * boardSize + boardSize / 2
 				y0 = self.y * boardSize + boardSize / 2
@@ -216,11 +218,12 @@ class Player:
 				x2 = self.y * boardSize + boardSize / 2
 
 				# render the line behind player
-				graphics.drawLine(x0, y0, x1, x2)
+				objects.graphics.drawLine(x0, y0, x1, x2)
 				self.x = wormhole.exit.exitX
 				self.y = wormhole.exit.exitY
-				xDirection = self.getXDirection(wormhole.translateDirection(newDirection))
-				yDirection = self.getYDirection(wormhole.translateDirection(newDirection))
+				newDirection = wormhole.translateDirection(newDirection)
+				xDirection = self.getXDirection(newDirection)
+				yDirection = self.getYDirection(newDirection)
 				objects.graphics.teleportPlayer(self.x, self.y)
 				x0 = self.x * boardSize + boardSize / 2
 				y0 = self.y * boardSize + boardSize / 2
