@@ -38,6 +38,7 @@ class Player:
 		totalReward = 0
 		hasDied = False
 		resultingKeyPositionList = copy.deepcopy(board.keys)
+		originalAction = action	# will keep track of the original action in case wormhole changes it
 
 		# set the direction vector for the player movement based on the newDirection variable
 		xDirection = 0
@@ -111,11 +112,11 @@ class Player:
 
 		if hasDied is True:
 			print("Player Died")
-			objects.qLearn.updateState(action, totalReward)
+			objects.qLearn.updateState(originalAction, totalReward)
 			time.sleep(0.1)
 			main.restart()
 		else:
-			objects.qLearn.updateState(action, totalReward)
+			objects.qLearn.updateState(originalAction, totalReward)
 
 	def aiMove(self, action, board, graphics):
 		# This function will be run in main.py main() function in the game loop.
@@ -123,6 +124,7 @@ class Player:
 		# They're being passed to this function from main.py main() function
 
 		boardSize = board.size  # grab the board size of the current board
+		originalAction = action
 
 		# set the direction vector for the player movement based on the newDirection variable
 		xDirection = 0
