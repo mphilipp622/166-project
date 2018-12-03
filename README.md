@@ -9,9 +9,13 @@ The goal of the agent is to collect the keys that are in the level and go to the
 ## Developers
 
 [Zachary Andersen](https://github.com/Xakaree)
+
 Abhishek Gupta
+
 [Joshua Holland](https://github.com/ggkfox)
+
 Juan Mejia
+
 [Mark Philipp](https://github.com/mphilipp622)
 
 ## Pre-requisites
