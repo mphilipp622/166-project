@@ -32,15 +32,12 @@ def initialize():
 		else:
 			valueIteration = False
 
-		# boardConstructor(height, width, tileSize)
 		board = boardLibrary.Board(sys.argv[1])
 
-		#playerConstructor(startingXPos, startingYPos)
 		player = playerLibrary.Player(board.playerPosition[0], board.playerPosition[1])
 
 		startingState = state.State((player.x, player.y), [(key.x, key.y) for key in board.keys])
-		# if stateHandler is None:
-		# 	stateHandler = stateHandler.StateHandler(state.State((player.x, player.y), [(key.x, key.y) for key in board.keys], None))
+
 		if valueIteration is True:
 			mdp = mdpLibrary.MDP(startingState)
 			qLearn = None
@@ -48,24 +45,17 @@ def initialize():
 			qLearn = qLearningLibrary.QLearn(startingState)
 			mdp = None
 
-		# currentState = state.State(player, None, board.keys)    # tracks the current state of the game.
-
 		graphics = graphicsLibrary.Graphics()
 
-		# if sys.argv[2] == 'v':
-		#     ai = mdpLibrary.MDP(state.State((player.x, player.y), [(key.x, key.y) for key in board.keys], None))
-		# elif sys.argv[2] == 'q':
-		#     ai = qLearningLibrary.QLearn(state.State((player.x, player.y), [(key.x, key.y) for key in board.keys], None))
 	else:
 		print("error: not enough arguments provided. Provide level json file followed by string 'v' or 'q' for value iteration or q-learning respectively")
 		exit()
 
 def restart():
 	global board, player, graphics, mdp, valueIteration, qLearn, stateHandler
-	# boardConstructor(height, width, tileSize)
+
 	board = boardLibrary.Board(sys.argv[1])
 
-	#playerConstructor(startingXPos, startingYPos)
 	player = playerLibrary.Player(board.playerPosition[0], board.playerPosition[1])
 
 	# if we run restart, we already know we have an mdp or a qlearn object.
@@ -76,4 +66,3 @@ def restart():
 		qLearn.currentState = state.State((player.x, player.y), [(key.x, key.y) for key in board.keys])
 		print("Iterations: " + str(qLearn.iterations))
 		print("Win Rate = " + str(round(qLearn.getWinRate(), 2)) + "%")
-	# graphics = graphicsLibrary.Graphics()

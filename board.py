@@ -24,8 +24,10 @@ class Board:
         self.size = self.levelData["tileSize"]
         self.playerPosition = (self.levelData["player"][0], self.levelData["player"][1]) # player starting position as (x, y) tuple
         self.exitKeysRequired = self.levelData["exit"]["keys"]
+
         self.keys = list()
         self.wormholes = list()
+        
         self.makeBoard()
 
     def makeBoard(self):

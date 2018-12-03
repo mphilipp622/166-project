@@ -17,8 +17,6 @@ def start():
 
 def restart():
 	# called on by player.aiMove() function if exit condition is met
-	# objects.graphics.quit()
-	# objects.graphics.root.after_cancel()
 	global currentJob
 
 	if currentJob:
@@ -34,7 +32,6 @@ def main():
 	global currentJob
 	# Main Game Loop. Enemy movement, wormhole movement, player movement all go here
 
-	# objects.player.move()
 	if objects.valueIteration is True:
 		objects.player.aiMove(objects.mdp.getCurrentStateActionFromPolicy(), objects.board, objects.graphics)
 	elif objects.valueIteration is False:
@@ -45,7 +42,7 @@ def main():
 	if objects.valueIteration is True:
 		objects.mdp.updateCurrentState(objects.player, objects.board.keys)
 
-	currentJob = objects.graphics.root.after(200, main) # pause for 150 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
+	currentJob = objects.graphics.root.after(150, main) # pause for 150 ms and reloop this function. SHOULD ALWAYS BE AT BOTTOM OF MAIN()
 
 if __name__ == '__main__':
 	start()

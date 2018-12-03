@@ -29,7 +29,6 @@ class QLearn:
 		# get all possible player, key, and wormhole positions. Positions are stored as a tuple of (x, y) coordinates.
 		# Note that these are ALL positions each of these items can occupy.
 		playerPos = list()
-		# wormholePos = list()
 		keyPos = list()
 
 		# get player positions
@@ -44,11 +43,7 @@ class QLearn:
 		
 		# get all valid combinations of key positions.
 		keyList = self.getKeyPositionCombinations()
-		
-		# get all valid wormhole combinations of positions
-		# wormholeList = self.getWormholePositionCombinations()
-		# stateList = list(itertools.product(playerPos, keyList, wormholeList))
-		
+				
 		# populate list of all possible states
 		stateList = list(itertools.product(playerPos, keyList))
 		
@@ -64,10 +59,6 @@ class QLearn:
 				self.qTable[(stateObj, action)] = 0   # initialize state's value to 0 in the dictionary
 
 		self.qTable[(None, None)] = 0   # this will be used for the exit state
-		# self.policyTable[None] = "Exit"
-		# for key, val in self.currentStateValues.items():
-		#     print key
-		#     print val
 
 	def getActionVector(self, currentState, board):
 		# helper function called by valueIteration() to get a vector of valid directions from the position passed.
@@ -166,7 +157,6 @@ class QLearn:
 
 		# if we don't RNG epsilon for exploration, then return the best action from our policy so far
 		return self.policyTable[self.currentState]
-		# return self.qTable[]
 
 	def getWinRate(self):
 		return 100 * float(self.numberOfWins / self.iterations)

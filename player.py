@@ -11,7 +11,6 @@ class Player:
 		self.y = newY   # y position of player
 		self.size = int(objects.board.size / 1.75)
 		self.keyCount = 0
-		self.overrideAction = None
 
 	def getActionVector(self, board):
 	    # helper function called by aiMove() to get a vector of valid directions from the player's current position.
@@ -68,13 +67,11 @@ class Player:
 			if board.tiles[self.x][self.y].hasKey():
 				self.keyCount += 1
 				board.removeKey(self.x, self.y)
-				if hasDied is False:
-					totalReward += 10
+				totalReward += 10
 
 			if board.tiles[self.x][self.y].isLava():
 				hasDied = True
-				if hasDied is False:
-					totalReward -= 1000
+				totalReward -= 1000
 				
 			if objects.board.tiles[self.x][self.y].isWormhole():
 				wormhole = objects.board.tiles[self.x][self.y]
@@ -92,8 +89,6 @@ class Player:
 				x0 = self.x * boardSize + boardSize / 2
 				y0 = self.y * boardSize + boardSize / 2
 				continue
-
-			# objects.graphics.moveCanvas(boardSize * xDirection, boardSize * yDirection)
 
 		objects.board.tiles[self.x][self.y].player = True
 
@@ -200,10 +195,6 @@ class Player:
 		# set the direction vector for the player movement based on the newDirection variable
 		xDirection = self.getXDirection(newDirection)
 		yDirection = self.getYDirection(newDirection)
-
-		# if self.overrideAction != None:
-		# 	newDirection = self.overrideAction
-		# 	self.overrideAction = None
 
 		#initial x and y positions
 		x0 = self.x * boardSize + boardSize / 2

@@ -40,10 +40,6 @@ class Key:
 
         myMoves = ["Left", "Right", "Up", "Down"]
 
-        # for i, tile in enumerate(board.tiles):
-        # 	for j, tile2 in enumerate(tile):
-        # 		print str(i) + ", " + str(j) + ": " + str(tile2.hasKey())
-
         if self.direction == None:
             self.direction = random.choice(myMoves)
 
@@ -56,10 +52,6 @@ class Key:
             myMoves.remove("Up")
         if (self.y == self.ymax or self.y == board.height - 1 or board.tiles[self.x][self.y+1].isNotValidKeyTile()):
             myMoves.remove("Down")
-
-        # print str(self.x) + ", " + str(self.y)
-        # print board.tiles[self.x][self.y + 1].isNotValidKeyTile()
-        # print str(self.xmin) + ", " + str(self.xmax) + ", " + str(self.ymin) + ", " + str(self.ymax)
         
         if len(myMoves) == 0:
             return
@@ -74,6 +66,5 @@ class Key:
             self.go(choice)
         else:
             self.go(self.direction)
-
-        # print(self.direction + "    " + str(self.x) + ", " + str(self.y))
+            
         board.tiles[self.x][self.y].key = True

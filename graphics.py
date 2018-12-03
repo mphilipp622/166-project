@@ -30,9 +30,6 @@ class Graphics:
 
         self.keys = dict()      # stores keys of type key.id, which is integer, and returns a canvas opal object.
         self.wormholes = list()
-        # self.initializeGraphics()
-        # self.keys = dict()
-        # self.wormholes = dict()
 
     def drawBackground(self):
         self.canvas.pack(fill=BOTH, expand=1)
@@ -55,10 +52,6 @@ class Graphics:
         playerSize = objects.player.size
         x1 = newX * boardSize + (boardSize/2)
         y1 = newY * boardSize + (boardSize/2)
-        # x1 = newX * boardSize + (boardSize - playerSize) / 2
-        # y1 = newY * boardSize + (boardSize - playerSize) / 2
-        # x2 = newX * boardSize + boardSize - (boardSize - playerSize) / 2
-        # y2 = newY * boardSize + boardSize - (boardSize - playerSize) / 2
 													
         self.canvas.coords(self.playerGraphic, x1, y1)
 
@@ -79,6 +72,7 @@ class Graphics:
         tileSize = objects.board.size
         boardHeight = objects.board.height
         boardWidth = objects.board.width
+
         # redraw the board
         self.canvas.delete("all")
         self.drawBackground()
@@ -147,14 +141,6 @@ class Graphics:
                                                         anchor=CENTER, image=self.pic)
         self.canvas.pack(fill=BOTH, expand=1)
 
-        """
-        self.playerGraphic = self.canvas.create_oval(objects.player.x *boardSize + (boardSize - playerSize) / 2,
-													objects.player.y*boardSize + (boardSize - playerSize) / 2,
-													objects.player.x*boardSize + boardSize - (boardSize - playerSize) / 2,
-													objects.player.y*boardSize + boardSize - (boardSize - playerSize) / 2,
-													fill='red')
-        """
-
 
     def drawKeys(self):
         boardSize = objects.board.size
@@ -185,16 +171,6 @@ class Graphics:
         # this function is called on by main when a game ends and the game must restart
         import main
 
-        # self.root.after_cancel(self.job)    # cancels the main game loop if it's runnin
         self.updateBoard()
         self.drawPlayer()
         self.drawKeys()
-        # self.job = self.root.after(500, main.main)
-
-    # def quit(self):
-    #     self.root.destroy()
-    #     self.root = Tk()                     #This creates a window, but it won't show up
-    #     self.root.wm_title("CSCI 166 Project       by: Joshua Holland") #Makes the title that will appear in the top left
-    #     self.root.geometry("%dx%d+%d+%d" % (objects.board.width * objects.board.size, objects.board.height * objects.board.size, 130, 100))
-    #     self.canvas = Canvas(self.root, width = objects.board.width * objects.board.size, height= objects.board.height * objects.board.size)
-    #     self.canvas.pack()
