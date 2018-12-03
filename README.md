@@ -24,10 +24,10 @@ The following modules must be installed to compile and run the program:
 	- pillow
 	- keyboard
 	
-It's recommended to use pip to install the above packages. E.G:
+It's recommended to use pip to install the above packages.
 **pip install pillow**
 **pip install keyboard**
-**pip install tkinter.**
+**pip install tkinter**
 
 NOTE: Python 2 uses a capital T for Tkinter. Python 3 is all lowercase: tkinter
 
