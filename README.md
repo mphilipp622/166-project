@@ -84,3 +84,7 @@ def __init__(self, startingState):
 		self.learningRate = 0.2
 		self.epsilon = 0.9
 ```
+
+## Creating Levels
+
+Level parsing is handled using JSON. If you want to create your own levels, refer to some of the existing JSON files in the root directory. Once you create a level, you can simply load it using the command line argument when you run the program, as outlined in the "How to run" section, above.
