@@ -25,6 +25,7 @@ The following modules must be installed to compile and run the program:
 	- keyboard
 	
 It's recommended to use pip to install the above packages.
+
 **pip install pillow**
 **pip install keyboard**
 **pip install tkinter**
