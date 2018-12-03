@@ -5,12 +5,12 @@ import random
 
 class QLearn:
 
-	def __init__(self, startingState):
+	def __init__(self, startingState, reward, livingReward, learningRate, epsilon):
 		# Variables that change the AI behavior
-		self.rewardDiscount = 0.5
-		self.livingReward = -1
-		self.learningRate = 0.2
-		self.epsilon = 0.9
+		self.rewardDiscount = reward
+		self.livingReward = livingReward
+		self.learningRate = learningRate
+		self.epsilon = epsilon
 
 		self.currentState = startingState
 		self.states = list()                	# contains all the valid states of the model

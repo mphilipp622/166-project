@@ -7,10 +7,10 @@ import time
 
 class MDP:
 
-    def __init__ (self, startingState, iterations = None):
+    def __init__ (self, startingState, reward, livingReward, iterations = None):
         # Variables that change the AI behavior
-        self.rewardDiscount = 0.5
-        self.livingReward = 0
+        self.rewardDiscount = reward
+        self.livingReward = livingReward
         self.iterations = iterations if iterations != None else 10
 
         self.intendedActionProbability = 0.8    # intended action succeeds 80% of the time
@@ -138,7 +138,7 @@ class MDP:
             return (None, 100)
         if action == "Stay":
             # if we stay, return the state we were just in
-            return (originalState, 0)
+            return (originalState, self.livingReward)
 
         totalReward = 0 # track the reward we end up getting for taking this action
         xDirection = 0

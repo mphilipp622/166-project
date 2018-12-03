@@ -27,11 +27,28 @@ def initialize():
 			print("error: AI algorithm type not specified. Please use 'v' for value iteration or 'q' for q-learning")
 			exit()
 
-		if sys.argv[2] == 'v':
-			valueIteration = True
-		else:
-			valueIteration = False
+		rewardArgument = None
+		livingReward = None
+		iterations = None
+		learninRate = None
+		epsilon = None
 
+		if sys.argv[2] == 'v':
+			if len(sys.argv) != 6:
+				print("Error: value iteration requires reward discount, living reward, and number of iterations.\npython main.py level.json v 0.8 -1 50")
+				exit()
+			valueIteration = True
+			iterations = int(sys.argv[5])
+		else:
+			if len(sys.argv) != 7:
+				print("Error: q learning requires reward, living reward, learning rate, and epsilon.\npython main.py level.json 0.8 -1 0.2 0.9")
+				exit()
+			valueIteration = False
+			learningRate = float(sys.argv[5])
+			epsilon = float(sys.argv[6])
+
+		rewardArgument = float(sys.argv[3])
+		livingReward = float(sys.argv[4])
 		board = boardLibrary.Board(sys.argv[1])
 
 		player = playerLibrary.Player(board.playerPosition[0], board.playerPosition[1])
@@ -39,10 +56,10 @@ def initialize():
 		startingState = state.State((player.x, player.y), [(key.x, key.y) for key in board.keys])
 
 		if valueIteration is True:
-			mdp = mdpLibrary.MDP(startingState)
+			mdp = mdpLibrary.MDP(startingState, rewardArgument, livingReward, iterations)
 			qLearn = None
 		else:
-			qLearn = qLearningLibrary.QLearn(startingState)
+			qLearn = qLearningLibrary.QLearn(startingState, rewardArgument, livingReward, learningRate, epsilon)
 			mdp = None
 
 		graphics = graphicsLibrary.Graphics()

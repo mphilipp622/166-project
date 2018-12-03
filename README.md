@@ -40,23 +40,34 @@ NOTE: Python 2 uses a capital T for Tkinter. Python 3 is all lowercase: tkinter
 
 ## How to run
 
-Open a python terminal and navigate to the root directory of the repository. Once inside, run the following syntax:
+Open a python terminal and navigate to the root directory of the repository.
 
-python main.py <nameOfJsonFile>.json <v or q>
+### Running Value Iteration
+Now, to run value iteration, put in the following syntax:
 
-where <nameOfJsonFile> is the name of the level you wish to load. <v or q> means that you can put either v or q in this spot to run value iteration or q-learning. Value iteration uses the 'v' parameter and q-learning uses the 'q' parameter.
+python main.py <nameOfJsonFile>.json v <rewardDiscount> <livingReward> <iterations> 
 
-Here's an example compilation:
+E.G: **python main.py level1.json v 0.8 1 25**
 
-**python main.py testValueIter.json v**
+**nameOfJsonFile**  = the name of the file that contains the level JSON data.
 
-This will run the testValueIter level using value iteration.
+**rewardDiscount** 	= how much weight the agent gives to future rewards vs. immediate rewards. A high value (e.g 0.8) will favor later rewards while a low value (e.g 0.2) will favor immediate rewards.
 
-Another example:
+**livingReward**	= Specifies how much of a reward is given to the agent for being alive. This value is always added to the total reward of an action that is taken. For instance, to reward the agent for staying alive, you can set this value to a positive. To punish it for staying alive, you can give it a negative value. This will ideally force the agent to try and finish more quickly.
 
-**python main.py testValueIter2.json q**
+**iterations**		= This is the number of iterations the algorithm runs to find a policy to use. The higher iterations, the more accurate the policy. However, a large iterations value will take much longer to computer. Lower iterations compile quickly, but may not result in an optimal policy.
 
-This will run the testValueIter2 level using q learning.
+###	Running Q-Learning
+
+python main.py <nameOfJsonFile>.json q <rewardDiscount> <livingReward> <learningRate> <epsilon>
+
+E.G: **python main.py level1.json q 0.5 -1 0.2 0.9**
+
+**rewardDiscount, livingReward, and nameOfJsonFile** are described in the value iteration section, above.
+
+**learningRate**	= This is a value between 0 and 1 that specifies how much the agent weighs newly found data versus old data. For instance, if learningRate is high (0.8), then the new reward found from the action just taken will weigh heavier than the old value the agent had previously found from taking that action. In contrast, a lower value (0.2), will weight previous values more.
+
+**epsilon**			= This is a value between 0 and 1 that dictates a probability the agent takes a random action that is off-policy. Note that the epsilon value decays exponentially with each game that's played by the agent. The idea is to encourage the agent to explore options that are off-policy with some small chance. A high epsilon means the agent will take a lot of random actions early on, which will decay over time. A low value means the agent will be less likely to take random actions.
 
 ## Value Iteration Compilation Time
 
