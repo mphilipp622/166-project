@@ -8,18 +8,22 @@ import time
 class MDP:
 
     def __init__ (self, startingState, iterations = None):
+        # Variables that change the AI behavior
+        self.rewardDiscount = 0.5
+        self.livingReward = 0
+        self.iterations = iterations if iterations != None else 10
+
+        self.intendedActionProbability = 0.8    # intended action succeeds 80% of the time
+        self.unintendedActionProbability = 0.2  # unintended action occurs 20% of the time. This will be split by the number of unintended actions available in a state
+
         self.currentState = startingState
+
         self.states = list()                # contains all the valid states of the model
         self.policyTable = dict()           # this will be a dictionary of (state : action) pairs. This will be updated by value iteration and q-learning
         self.currentStateValues = dict()    # dictionary of (State : float) pairs. Used for value iteration. This will hold V_K values
         self.nextStates = dict()            # dictionary of (state, action) keys that returns the State that (s,a) will go to.
         self.transitionFunctions = dict()   # will contain (s,a) tuple for the key and returns a list of (action, probability) tuples
         self.rewardFunctions = dict()       # will contain (s,a,s') tuple for the key and a reward value   
-        self.rewardDiscount = 0.5
-        self.livingReward = 0
-        self.intendedActionProbability = 0.8    # intended action succeeds 80% of the time
-        self.unintendedActionProbability = 0.2  # unintended action occurs 20% of the time. This will be split by the number of unintended actions available in a state
-        self.iterations = iterations if iterations != None else 10
 
         self.initializeStates()                         # initialize all the states that exist in the MDP
         self.initializeNextStateTableAndRewardTable()   # initialize table of next states given original state and R(s,a,s') for all states and actions
@@ -29,9 +33,6 @@ class MDP:
         self.valueIteration()
         end = time.time()
         print (end - start)
-        # for key, val in self.currentStateValues.items():
-        #     print key
-        #     print val
 
     def initializeStates(self):
         # iterates over the board and creates every valid state that exists in the MDP.

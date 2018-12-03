@@ -62,4 +62,21 @@ Value iteration takes a relatively long time to compute, especially for large le
 
 For value iteration, you can modify the number of iterations, the reward discount, and the living reward in the **mdp.py** file in the MDP class constructor.
 
+```python
+ def __init__ (self, startingState, iterations = None):
+        # Variables that change the AI behavior
+        self.rewardDiscount = 0.5
+        self.livingReward = 0
+        self.iterations = iterations if iterations != None else 10
+```
+
 For Q-Learning, you can modify Epsilon, reward discount, living reward, and learning rate by going to the **qLearning.py** file and changing the values in the QLearn class constructor.
+
+```python
+def __init__(self, startingState):
+		# Variables that change the AI behavior
+		self.rewardDiscount = 0.5
+		self.livingReward = -1
+		self.learningRate = 0.2
+		self.epsilon = 0.9
+```

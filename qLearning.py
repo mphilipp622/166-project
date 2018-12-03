@@ -6,17 +6,19 @@ import random
 class QLearn:
 
 	def __init__(self, startingState):
-		self.currentState = startingState
-		self.states = list()                	# contains all the valid states of the model
+		# Variables that change the AI behavior
 		self.rewardDiscount = 0.5
 		self.livingReward = -1
 		self.learningRate = 0.2
 		self.epsilon = 0.9
-		self.iterations = 0						# DON'T MODIFY THIS. The agent increments this on its own.
-		self.numberOfWins = 0
 
+		self.currentState = startingState
+		self.states = list()                	# contains all the valid states of the model
 		self.policyTable = dict()			  	# store policies using state as a key, which returns an action
 		self.qTable = dict()    				# will store q values using (state, action) keys and a floating point value
+		
+		self.iterations = 0						# DON'T MODIFY THIS. The agent increments this on its own.
+		self.numberOfWins = 0
 
 		self.initializeStates()                 # initialize all the states that exist in the MDP
 
