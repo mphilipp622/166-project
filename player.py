@@ -68,11 +68,13 @@ class Player:
 			if board.tiles[self.x][self.y].hasKey():
 				self.keyCount += 1
 				board.removeKey(self.x, self.y)
-				totalReward += 10
+				if hasDied is False:
+					totalReward += 10
 
 			if board.tiles[self.x][self.y].isLava():
 				hasDied = True
-				totalReward -= 1000
+				if hasDied is False:
+					totalReward -= 1000
 				
 			if objects.board.tiles[self.x][self.y].isWormhole():
 				wormhole = objects.board.tiles[self.x][self.y]
