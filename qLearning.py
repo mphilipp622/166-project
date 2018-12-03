@@ -12,7 +12,7 @@ class QLearn:
 		self.livingReward = -1
 		self.learningRate = 0.2
 		self.epsilon = 0.9
-		self.iterations = 0
+		self.iterations = 0						# DON'T MODIFY THIS. The agent increments this on its own.
 		self.numberOfWins = 0
 
 		self.policyTable = dict()			  	# store policies using state as a key, which returns an action
