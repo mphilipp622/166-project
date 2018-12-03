@@ -1,0 +1,36 @@
+{
+	"height" : 3,
+	
+	"width" : 3,
+	
+	"tileSize" : 200,
+	
+	"player" : [0,0],
+	
+	"exit" : 
+	{
+		"position" : [2, 2], 
+		"keys" : 2
+	},
+
+	"walls" :
+	[
+		{
+			"position" : [1, 0]
+		}
+	],
+	
+	"keys": 
+	[
+		{
+			"startingPosition": [2, 0],
+			"positionBoundsX" : [1, 2],
+			"positionBoundsY" : [0, 1]
+        },
+        {
+            "startingPosition": [1, 1],
+			"positionBoundsX" : [0, 1],
+			"positionBoundsY" : [1, 2]
+        }
+	]
+}

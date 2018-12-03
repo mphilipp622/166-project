@@ -1,7 +1,10 @@
+import tile
 
-class PortalExit:
+class PortalExit(tile.Tile):
 
-    def __init__(self, newX, newY, newDirection):
-        self.x = newX
-        self.y = newY
+    def __init__(self, x, y, newDirection):
         self.direction = newDirection
+        self.type = "wormholeExit"
+        self.key = False
+        self.exitX = x
+        self.exitY = y

@@ -1,0 +1,151 @@
+{
+	"height" : 15,
+	
+	"width" : 15,
+	
+	"tileSize" : 60,
+	
+	"player" : [7, 7],
+	
+	"exit" : 
+	{
+		"position" : [10, 10], 
+		"keys" : 3
+	},
+
+	"walls" :
+	[
+		{
+			"position" : [0, 2]
+		},
+		{
+			"position" : [0, 6]
+		},
+		{
+			"position" : [0, 13]
+		},
+		{
+			"position" : [1, 13]
+		},
+		{
+			"position" : [2, 4]
+		},
+		{
+			"position" : [2, 5]
+		},
+		{
+			"position" : [2, 6]
+		},
+		{
+			"position" : [2, 7]
+		},
+		{
+			"position" : [2, 8]
+		},
+		{
+			"position" : [2, 9]
+		},
+		{
+			"position" : [2, 10]
+		},
+		{
+			"position" : [5, 0]
+		},
+		{
+			"position" : [5, 6]
+		},
+		{
+			"position" : [5, 7]
+		},
+		{
+			"position" : [5, 8]
+		},
+		{
+			"position" : [5, 9]
+		},
+		{
+			"position" : [9, 4]
+		},
+		{
+			"position" : [10, 11]
+		},
+		{
+			"position" : [10, 12]
+		},
+		{
+			"position" : [11, 0]
+		},
+		{
+			"position" : [11, 1]
+		},
+		{
+			"position" : [11, 7]
+		},
+		{
+			"position" : [12, 13]
+		},
+		{
+			"position" : [13, 10]
+		},
+		{
+			"position" : [14, 3]
+		}
+	],
+
+	"deathTiles": 
+	[
+		{
+			"position" : [7, 8]
+		},
+		{
+			"position" : [7, 9]
+		},
+		{
+			"position": [8,0]
+		},
+		{
+			"position" : [9, 0]
+		},
+		{
+			"position" : [10, 5]
+		},
+		{
+			"position" : [10, 6]
+		}
+	],
+
+	"wormholes": 
+	[
+		{
+			"positionEntrance": [12, 8],
+			"positionExit": [1, 2],
+			"directionEntrance": "up",
+			"directionExit" : "right"
+		},
+		{
+			"positionEntrance": [12, 14],
+			"positionExit": [9, 5],
+			"directionEntrance": "right",
+			"directionExit" : "up"
+		}
+	],
+	
+	"keys": 
+	[
+		{
+			"startingPosition": [4,8],
+			"positionBoundsX" : [0,5],
+			"positionBoundsY" : [4,10]
+		},
+		{
+			"startingPosition": [8,10],
+			"positionBoundsX" : [6,10],
+			"positionBoundsY" : [8,14]
+		},
+		{
+			"startingPosition": [12,2],
+			"positionBoundsX" : [9,14],
+			"positionBoundsY" : [0,6]
+		}
+	]
+}
