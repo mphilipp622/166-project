@@ -45,7 +45,7 @@ Open a python terminal and navigate to the root directory of the repository.
 ### Running Value Iteration
 Now, to run value iteration, put in the following syntax:
 
-python main.py <nameOfJsonFile>.json v <rewardDiscount> <livingReward> <iterations> 
+python main.py &lt;derp<nameOfJsonFile&lt;derp>.json v &lt;derp<rewardDiscount&lt;derp> &lt;derp<livingReward&lt;derp> &lt;derp<iterations&lt;derp> 
 
 E.G: **python main.py level1.json v 0.8 1 25**
 
