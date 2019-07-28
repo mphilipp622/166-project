@@ -24,21 +24,21 @@ class QLearn:
 
 	def initializeStates(self):
 		# iterates over the board and creates every valid state that exists in the MDP.
-		# this is gonna be computationally expensive as shit.
+		# this is computationally expensive.
 
 		# get all possible player, key, and wormhole positions. Positions are stored as a tuple of (x, y) coordinates.
 		# Note that these are ALL positions each of these items can occupy.
 		playerPos = list()
 		keyPos = list()
 
-		# get player positions
+		# get valid player positions
 		for x in range(0, len(objects.board.tiles)):
 			for y in range(0, len(objects.board.tiles[0])):
 
 				if objects.board.tiles[x][y].isWall():
 					continue
 				
-				# if this tile is avalid player position, add it to list.
+				# if this tile is a valid player position, add it to list.
 				playerPos.append((x, y))   
 		
 		# get all valid combinations of key positions.
@@ -49,7 +49,7 @@ class QLearn:
 		
 		for newState in stateList:
 			stateObj = state.State(newState[0], newState[1])
-			self.states.append(stateObj) # will change to state.State(state[0], state[1], state[2]) once wormholes are in.
+			self.states.append(stateObj)
 			
 			actionVector = self.getActionVector(stateObj, objects.board)
 			# assign a random action to the initial policy
